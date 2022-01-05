@@ -28,6 +28,5 @@ This package is still highly experimental - suggestions and comments are always 
 
 <!---
 # Citing Baytes.jl
-
 If you use Baytes.jl for your own research, please consider citing the following publication: ...
 -->
