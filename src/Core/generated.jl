@@ -87,15 +87,6 @@ Convert struct 'x' to tuple without additional allocations.
 end
 
 ############################################################################################
-"""
-$(SIGNATURES)
-Subset fields 'sym' of struct 'x' to tuple without additional allocations.
-
-# Examples
-```julia
-```
-
-"""
 @generated function to_Tuple_generated(x, sym...)
     tup = Expr(:tuple)
     for v in sym
