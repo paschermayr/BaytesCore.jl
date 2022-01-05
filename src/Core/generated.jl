@@ -19,7 +19,7 @@ julia> subset( (a = 1., b = 2., c = 3.), (:a, :b) )
 ############################################################################################
 """
 $(SIGNATURES)
-Convert Tuple `tup` to NamedTuple with all fields equal to val.
+Convert Tuple tup to NamedTuple with all fields equal to val.
 
 # Examples
 ```julia
@@ -32,7 +32,7 @@ end
 
 """
 $(SIGNATURES)
-Convert Tuple `tup` to NamedTuple with fields equal to val.
+Convert Tuple tup to NamedTuple with fields equal to val.
 
 # Examples
 ```julia
@@ -50,7 +50,7 @@ end
 ############################################################################################
 """
 $(SIGNATURES)
-Subset NamedTuple `obj` with keys of `s` without allocations.
+Subset NamedTuple obj with keys of s without allocations.
 
 # Examples
 ```julia
@@ -80,7 +80,7 @@ end
 ############################################################################################
 """
 $(SIGNATURES)
-Subset NamedTuple `x` given symbols `sym` without additional allocations.
+Subset NamedTuple x given symbols sym without additional allocations.
 
 # Examples
 ```julia
@@ -99,7 +99,7 @@ getval(::Type{Val{T}}) where {T} = T
 ############################################################################################
 """
 $(SIGNATURES)
-Convert struct `x` to NamedTuple without additional allocations.
+Convert struct x to NamedTuple without additional allocations.
 
 # Examples
 ```julia
@@ -124,7 +124,7 @@ end
 ############################################################################################
 """
 $(SIGNATURES)
-Generate union of fields from 2 NamedTuples `x` and `y`.
+Generate union of fields from 2 NamedTuples x and y.
 
 # Examples
 ```julia
