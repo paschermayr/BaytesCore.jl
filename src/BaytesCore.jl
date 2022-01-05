@@ -15,6 +15,11 @@ using Random: Random, AbstractRNG, GLOBAL_RNG
 include("Dispatch/Dispatch.jl")
 include("Core/Core.jl")
 
+function checkifmysuperlongfunctiongetsappropriatelytaggedwithbluestyle(myfirstargument, x, mythirdargument)
+                    return nothing
+end
+
+
 ############################################################################################
 #export
 
