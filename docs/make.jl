@@ -21,5 +21,5 @@ makedocs(;
 
 deploydocs(;
     repo="github.com/paschermayr/BaytesCore.jl",
-    devbranch="master",
+    devbranch="main",
 )
