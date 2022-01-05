@@ -4,7 +4,7 @@ CurrentModule = BaytesCore
 
 # BaytesCore
 
-Documentation HELLO for [BaytesCore](https://github.com/paschermayr/BaytesCore.jl).
+Documentation for [BaytesCore](https://github.com/paschermayr/BaytesCore.jl).
 
 ```@index
 HELLO
@@ -13,5 +13,3 @@ HELLO
 ```@autodocs
 Modules = [BaytesCore]
 ```
-
-Can you see me now?
