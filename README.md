@@ -6,8 +6,8 @@
 [![arXiv article](xxx)](xxx)
 -->
 [![Documentation, Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://paschermayr.github.io/BaytesCore.jl/stable)
-[![Build Status](https://github.com/paschermayr/BaytesCore.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/paschermayr/BaytesCore.jl/actions/workflows/CI.yml?query=branch%3Amaster)
-[![Coverage](https://codecov.io/gh/paschermayr/BaytesCore.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/paschermayr/BaytesCore.jl)
+[![Build Status](https://github.com/paschermayr/BaytesCore.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/paschermayr/BaytesCore.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/paschermayr/BaytesCore.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/paschermayr/BaytesCore.jl)
 [![ColPrac: Contributor's Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
 
 Core structures that are shared for various Baytes modules.
