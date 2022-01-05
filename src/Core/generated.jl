@@ -17,6 +17,7 @@ julia> subset( (a = 1., b = 2., c = 3.), (:a, :b) )
 @inline subset(nt::NamedTuple, s::Symbol) = NamedTuple{(s,)}(nt)
 
 ############################################################################################
+#=
 """
 $(SIGNATURES)
 Convert Tuple tup to NamedTuple with all fields equal to val.
@@ -26,10 +27,12 @@ Convert Tuple tup to NamedTuple with all fields equal to val.
 ```
 
 """
+=#
 function Tuple_to_Namedtuple(tup::Tuple, val)
     return NamedTuple{tup}(map(x -> val, eachindex(tup)))
 end
 
+#=
 """
 $(SIGNATURES)
 Convert Tuple tup to NamedTuple with fields equal to val.
@@ -39,6 +42,7 @@ Convert Tuple tup to NamedTuple with fields equal to val.
 ```
 
 """
+=#
 function to_NamedTuple(tup::Tuple, val::AbstractVector)
     if length(tup) == 1
         #!NOTE Safe method even if Tuple is only a single symbol and val non-scalar
@@ -48,6 +52,7 @@ function to_NamedTuple(tup::Tuple, val::AbstractVector)
     end
 end
 ############################################################################################
+#=
 """
 $(SIGNATURES)
 Subset NamedTuple obj with keys of s without allocations.
@@ -57,6 +62,7 @@ Subset NamedTuple obj with keys of s without allocations.
 ```
 
 """
+=#
 @generated function subset(obj::NamedTuple, s::NamedTuple)
     #!NOTE: https://discourse.julialang.org/t/generated-function-iterate-over-function-argument/66087/10
     fnames = fieldnames(s)
@@ -78,6 +84,7 @@ end
 end
 
 ############################################################################################
+#=
 """
 $(SIGNATURES)
 Subset NamedTuple x given symbols sym without additional allocations.
@@ -87,6 +94,7 @@ Subset NamedTuple x given symbols sym without additional allocations.
 ```
 
 """
+=#
 @generated function to_Tuple_generated(x, sym...)
     tup = Expr(:tuple)
     for v in sym
@@ -124,6 +132,7 @@ function generate_tuple(container)
 end
 
 ############################################################################################
+#=
 """
 $(SIGNATURES)
 Generate union of fields from 2 NamedTuples x and y.
@@ -133,6 +142,7 @@ Generate union of fields from 2 NamedTuples x and y.
 ```
 
 """
+=#
 @generated function keyunion(x::NamedTuple{Kx,Tx}, y::NamedTuple{Ky,Ty}) where {Kx,Tx,Ky,Ty}
     return union(Kx, Ky)
 end
