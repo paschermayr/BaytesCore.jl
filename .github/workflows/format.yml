@@ -19,7 +19,7 @@ jobs:
           using Pkg
           Pkg.add(PackageSpec(name="JuliaFormatter"))
           using JuliaFormatter
-          format("."; verbose=true)
+          format(".")
         shell: julia --color=yes {0}
       - name: Suggest formatting changes
         uses: reviewdog/action-suggester@v1
