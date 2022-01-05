@@ -97,6 +97,7 @@ end
 getval(::Type{Val{T}}) where {T} = T
 
 ############################################################################################
+#=
 """
 $(SIGNATURES)
 Convert struct x to NamedTuple without additional allocations.
@@ -106,6 +107,7 @@ Convert struct x to NamedTuple without additional allocations.
 ```
 
 """
+=#
 @generated function to_NamedTuple_generated(x)
     nt = Expr(:quote, generate_tuple(x))
     tup = Expr(:tuple)
