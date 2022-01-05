@@ -1,6 +1,6 @@
 ############################################################################################
 "Mostly generated functions that allow to transform NamedTuples without much allocations. Not Exported."
-
+#!NOTE: @generated does not seem to work properly with DocStringExtensions.jl, so documentation is done manually.
 ############################################################################################
 """
 $(SIGNATURES)
@@ -28,6 +28,7 @@ Convert Tuple tup to NamedTuple with all fields equal to val.
 
 """
 =#
+"Convert Tuple `tup` to NamedTuple with all fields equal to `val`."
 function Tuple_to_Namedtuple(tup::Tuple, val)
     return NamedTuple{tup}(map(x -> val, eachindex(tup)))
 end
@@ -43,6 +44,7 @@ Convert Tuple tup to NamedTuple with fields equal to val.
 
 """
 =#
+"Convert Tuple `tup` to NamedTuple with fields equal to `val`."
 function to_NamedTuple(tup::Tuple, val::AbstractVector)
     if length(tup) == 1
         #!NOTE Safe method even if Tuple is only a single symbol and val non-scalar
@@ -63,6 +65,7 @@ Subset NamedTuple obj with keys of s without allocations.
 
 """
 =#
+"Subset NamedTuple `obj` with keys of `s` without allocations."
 @generated function subset(obj::NamedTuple, s::NamedTuple)
     #!NOTE: https://discourse.julialang.org/t/generated-function-iterate-over-function-argument/66087/10
     fnames = fieldnames(s)
@@ -74,6 +77,7 @@ Subset NamedTuple obj with keys of s without allocations.
 end
 
 ############################################################################################
+"Convert strcut `x` to tuple."
 @generated function to_Tuple_generated(x)
     #!NOTE: see https://discourse.julialang.org/t/get-fieldnames-and-values-of-struct-as-namedtuple/8991/3
     tup = Expr(:tuple)
@@ -95,6 +99,7 @@ Subset NamedTuple x given symbols sym without additional allocations.
 
 """
 =#
+"Subset NamedTuple `x` given symbols `sym` without additional allocations."
 @generated function to_Tuple_generated(x, sym...)
     tup = Expr(:tuple)
     for v in sym
@@ -116,6 +121,7 @@ Convert struct x to NamedTuple without additional allocations.
 
 """
 =#
+"Convert struct `x` to NamedTuple without additional allocations."
 @generated function to_NamedTuple_generated(x)
     nt = Expr(:quote, generate_tuple(x))
     tup = Expr(:tuple)
@@ -143,6 +149,7 @@ Generate union of fields from 2 NamedTuples x and y.
 
 """
 =#
+"Generate union of fields from 2 NamedTuples `x` and `y`."
 @generated function keyunion(x::NamedTuple{Kx,Tx}, y::NamedTuple{Ky,Ty}) where {Kx,Tx,Ky,Ty}
     return union(Kx, Ky)
 end
