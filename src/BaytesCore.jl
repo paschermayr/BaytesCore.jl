@@ -15,7 +15,7 @@ using Random: Random, AbstractRNG, GLOBAL_RNG
 include("Dispatch/Dispatch.jl")
 include("Core/Core.jl")
 
-function checkifmysuperlongfunctiongetsappropriatelytaggedwithbluestyle(myfirstargument, x, mythirdargument)
+function checkifmysuperlongfunctiongetsappropriatelytaggedwithbluestyle2(myfirstargument, x, mythirdargument)
                     x     = 3
                 return nothing
 end

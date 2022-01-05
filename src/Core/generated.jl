@@ -68,15 +68,6 @@ Subset NamedTuple 'obj' with keys of 's', without allocations.
 end
 
 ############################################################################################
-"""
-$(SIGNATURES)
-Convert struct 'x' to tuple without additional allocations.
-
-# Examples
-```julia
-```
-
-"""
 @generated function to_Tuple_generated(x)
     #!NOTE: see https://discourse.julialang.org/t/get-fieldnames-and-values-of-struct-as-namedtuple/8991/3
     tup = Expr(:tuple)
@@ -87,6 +78,15 @@ Convert struct 'x' to tuple without additional allocations.
 end
 
 ############################################################################################
+"""
+$(SIGNATURES)
+Subset NamedTuple x given symbols sym without additional allocations.
+
+# Examples
+```julia
+```
+
+"""
 @generated function to_Tuple_generated(x, sym...)
     tup = Expr(:tuple)
     for v in sym
