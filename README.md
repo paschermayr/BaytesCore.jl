@@ -4,6 +4,7 @@
 ![logo](docs/src/assets/logo.svg)
 [![CI](xxx)](xxx)
 [![arXiv article](xxx)](xxx)
+
 -->
 [![Documentation, Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://paschermayr.github.io/BaytesCore.jl/)
 [![Build Status](https://github.com/paschermayr/BaytesCore.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/paschermayr/BaytesCore.jl/actions/workflows/CI.yml?query=branch%3Amain)
