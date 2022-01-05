@@ -16,7 +16,8 @@ include("Dispatch/Dispatch.jl")
 include("Core/Core.jl")
 
 function checkifmysuperlongfunctiongetsappropriatelytaggedwithbluestyle(myfirstargument, x, mythirdargument)
-                    return nothing
+                    x     = 3
+                return nothing
 end
 
 
