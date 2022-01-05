@@ -1,4 +1,3 @@
-" ModelWrappers - Contains useful code to perform inference on algorithms."
 module BaytesCore
 
 ############################################################################################
