@@ -12,3 +12,7 @@ Documentation for [BaytesCore](https://github.com/paschermayr/BaytesCore.jl).
 ```@autodocs
 Modules = [BaytesCore]
 ```
+
+## Package features
+
+Can i see this?
