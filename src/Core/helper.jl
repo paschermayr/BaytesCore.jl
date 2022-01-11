@@ -41,6 +41,31 @@ end
 """
 $(TYPEDEF)
 
+Mutable struct to hold a single scalar value that can be stored and updated in immutable structs.
+
+# Fields
+$(TYPEDFIELDS)
+"""
+mutable struct ValueHolder{T<:Real}
+    "Scalar value"
+    current::T
+    function ValueHolder(val::T) where {T<:Real}
+        return new{T}(val)
+    end
+end
+function update!(value::ValueHolder{T}, val::T) where {T<:Real}
+    value.current = val
+    return nothing
+end
+function init!(value::ValueHolder{T}, val::T) where {T<:Real}
+    value.current = val
+    return nothing
+end
+
+############################################################################################
+"""
+$(TYPEDEF)
+
 Mutable struct that can be stored and updated in immutable structs. Contains current iteration value.
 
 # Fields
@@ -93,4 +118,4 @@ end
 
 ############################################################################################
 # Export
-export UpdateBool, UpdateTrue, UpdateFalse, Updater, Iterator, Accumulator
+export UpdateBool, UpdateTrue, UpdateFalse, Updater, Iterator, Accumulator, ValueHolder
