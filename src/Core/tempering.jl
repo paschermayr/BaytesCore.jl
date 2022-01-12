@@ -23,14 +23,6 @@ function TemperDefault()
     return TemperDefault(UpdateFalse(), 1.0)
 end
 
-"""
-$(TYPEDEF)
-
-If `default.val` contains a vector instead of scalar, return multiple default structs with scalars and same adaption setting, else use current `default` struct.
-
-# Fields
-$(TYPEDFIELDS)
-"""
 function init!(default::TemperDefault{B, F}
 ) where {B<:UpdateBool, F<:AbstractFloat}
     return default
