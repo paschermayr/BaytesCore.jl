@@ -23,14 +23,8 @@ function TemperDefault()
     return TemperDefault(UpdateFalse(), 1.0)
 end
 
-"""
-$(TYPEDEF)
-
-split `default.val` temperatures into sepatre `TemperDefault` structs with scalar temperature.
-
-# Fields
-$(TYPEDFIELDS)
-"""
+#!NOTE: Cant use DocumenterTools for Base functions
+"Split `default.val` temperatures into sepatre `TemperDefault` structs with scalar temperature."
 function split(default::TemperDefault{B, F}
 ) where {B<:UpdateBool, F<:AbstractVector}
     return map(val -> TemperDefault(default.adaption, val), default.val)
