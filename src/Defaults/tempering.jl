@@ -23,17 +23,26 @@ function TemperDefault()
     return TemperDefault(UpdateFalse(), 1.0)
 end
 
-function init!(default::TemperDefault{B, F}
-) where {B<:UpdateBool, F<:AbstractFloat}
-    return default
-end
-function init!(default::Vector{<:TemperDefault{B, F}}
-) where {B<:UpdateBool, F<:AbstractFloat}
-    return default
-end
-function init!(default::TemperDefault{B, F}
+"""
+$(TYPEDEF)
+
+split `default.val` temperatures into sepatre `TemperDefault` structs with scalar temperature.
+
+# Fields
+$(TYPEDFIELDS)
+"""
+function split(default::TemperDefault{B, F}
 ) where {B<:UpdateBool, F<:AbstractVector}
     return map(val -> TemperDefault(default.adaption, val), default.val)
+end
+function split(default::TemperDefault{B, F}, chains::Integer
+) where {B<:UpdateBool, F<:AbstractFloat}
+    return map(iter -> TemperDefault(default.adaption, default.val), Base.OneTo(chains))
+end
+function split(default::TemperDefault{B, F}, chains::Integer
+) where {B<:UpdateBool, F<:AbstractVector}
+    ArgCheck.@argcheck length(default.val) == chains
+    return split(default)
 end
 
 ############################################################################################
@@ -145,4 +154,4 @@ end
 
 ############################################################################################
 # Export
-export TemperDefault, TemperingTune, TemperingParameter, update, checktemperature, init, init!
+export TemperDefault, TemperingTune, TemperingParameter, update, checktemperature, init, split
