@@ -6,18 +6,18 @@
 $(TYPEDEF)
 Super type for various particle resampling techniques.
 """
-abstract type ParameterResampling end
+abstract type ResamplingMethod end
 
 ############################################################################################
 # Types and structs - Resampling Methods
-struct Systematic <: ParameterResampling end
-struct Stratified <: ParameterResampling end
-struct Residual <: ParameterResampling end
+struct Systematic <: ResamplingMethod end
+struct Stratified <: ResamplingMethod end
+struct Residual <: ResamplingMethod end
 
 ############################################################################################
 """
 $(SIGNATURES)
-Resample particles, dispatched on ParameterResampling subtypes.
+Resample particles, dispatched on ResamplingMethod subtypes.
 
 # Examples
 ```julia
@@ -33,7 +33,7 @@ function resample!(
     iter::Integer,
     weights::Vector{<:Real},
     n::Integer=length(weights),
-) where {S<:ParameterResampling}
+) where {S<:ResamplingMethod}
     return resample!(_rng, type, view(container, :, iter), iter, weights, n)
 end
 
@@ -158,7 +158,7 @@ end
 ############################################################################################
 # Export
 export
-    ParameterResampling,
+    ResamplingMethod,
     resample!,
     randcat,
     Systematic,
