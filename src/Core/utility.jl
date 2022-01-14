@@ -28,6 +28,21 @@ end
 ############################################################################################
 """
 $(SIGNATURES)
+Check if `x` is larger than `threshold`, guaranteeing same type for arguments.
+
+# Examples
+```julia
+```
+
+"""
+function islarger(x::T, threshold::T) where {T<:Real}
+    #!NOTE: "<=" so Resampling at each iteration if threshold == 1.0
+    return x <= threshold
+end
+
+############################################################################################
+"""
+$(SIGNATURES)
 Return allocation friendly index of array argument.
 
 # Examples
@@ -78,4 +93,5 @@ grab(data, idx, config::ArrayConfig) = grab(data, idx, config.sorted)
 export logsumexp, #import from LogExpFunctions
     logaddexp, #import from LogExpFunctions
     logmeanexp,
+    islarger,
     grab

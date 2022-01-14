@@ -3,6 +3,7 @@ module BaytesCore
 ############################################################################################
 #Import External packages
 import Base: Base, split
+import Random: Random, shuffle!
 import LogExpFunctions: LogExpFunctions, logsumexp, logaddexp
 
 using DocStringExtensions:
@@ -16,6 +17,7 @@ using Random: Random, AbstractRNG, GLOBAL_RNG
 include("Dispatch/Dispatch.jl")
 include("Core/Core.jl")
 include("Defaults/Defaults.jl")
+include("Defaults/Sampling.jl")
 
 ############################################################################################
 #export
