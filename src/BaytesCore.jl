@@ -16,7 +16,7 @@ using Random: Random, AbstractRNG, GLOBAL_RNG
 #Import
 include("Dispatch/Dispatch.jl")
 include("Core/Core.jl")
-include("Defaults/Defaults.jl")
+include("Tune/Tune.jl")
 include("Sampling/Sampling.jl")
 
 ############################################################################################

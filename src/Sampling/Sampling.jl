@@ -5,7 +5,6 @@
 # Load sub-container
 include("statistics.jl")
 include("shuffle.jl")
-include("jitter.jl")
 include("resample.jl")
 include("weights.jl")
 
