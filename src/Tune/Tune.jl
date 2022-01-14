@@ -2,6 +2,7 @@
 # Include files
 include("tempering.jl")
 include("jitter.jl")
+include("chains.jl")
 
 ############################################################################################
 # Export

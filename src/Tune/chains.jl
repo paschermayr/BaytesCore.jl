@@ -9,7 +9,7 @@ $(TYPEDFIELDS)
 mutable struct ChainsTune
     "Proposed coverage of number of chains/number of data points."
     coverage::Float64
-    "Threshold for resampling, between 0.00 and 1.00."
+    "Threshold for resampling, between 0.0 and 1.0."
     threshold::Float64
     "Number of chains."
     Nchains::Int64
