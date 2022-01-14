@@ -17,7 +17,7 @@ using Random: Random, AbstractRNG, GLOBAL_RNG
 include("Dispatch/Dispatch.jl")
 include("Core/Core.jl")
 include("Defaults/Defaults.jl")
-include("Defaults/Sampling.jl")
+include("Sampling/Sampling.jl")
 
 ############################################################################################
 #export
