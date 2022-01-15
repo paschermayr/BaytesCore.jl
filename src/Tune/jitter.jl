@@ -56,7 +56,8 @@ function jitter!(tune::JitterTune, ρ::T) where {T<:AbstractFloat}
     elseif tune.Nsteps.current < tune.min
         return true
     #!NOTE: if not above or below boundary, check if correlation threshold is fullfiled
-    elseif ρ > tune.threshold
+    # If correlation smaller than threshold, stop jittering
+    elseif ρ < tune.threshold
         return false
     else
         return true
