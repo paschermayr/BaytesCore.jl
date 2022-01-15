@@ -7,6 +7,33 @@ abstract type ResamplingMethod end
 
 ############################################################################################
 """
+$(TYPEDEF)
+
+Stores information about resampling steps.
+
+# Fields
+$(TYPEDFIELDS)
+"""
+struct ResampleTune{R<:ResamplingMethod}
+    "Method for resampling."
+    method::R
+    "Stores if last iteration was resampled."
+    update::Updater
+    function ResampleTune(method::R, update::Updater) where {R<:ResamplingMethod}
+        return new{R}(method, update)
+    end
+end
+function update!(tune::ResampleTune)
+    update!(tune.update)
+    return nothing
+end
+function init!(tune::ResampleTune, bool::Bool)
+    init!(tune.update, bool)
+    return nothing
+end
+
+############################################################################################
+"""
 $(SIGNATURES)
 Resample particles, dispatched on ResamplingMethod subtypes.
 
@@ -54,5 +81,6 @@ end
 # Export
 export
     ResamplingMethod,
+    ResampleTune,
     resample!,
     randcat

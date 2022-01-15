@@ -32,8 +32,8 @@ function update!(updater::Updater)
     updater.current = updater.current ? false : true
     return nothing
 end
-function init!(updater::Updater, update::Bool)
-    updater.current = update
+function init!(updater::Updater, bool::Bool)
+    updater.current = bool
     return nothing
 end
 
