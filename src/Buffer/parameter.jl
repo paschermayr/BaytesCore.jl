@@ -84,7 +84,12 @@ struct ModelParameterBuffer{M<:NamedTuple, I<:Integer, L, T<:AbstractFloat}
     end
 end
 
-function ModelParameterBuffer(model, result, Nparameter::Integer, F::Type{I}) where {I<:Integer}
+function ModelParameterBuffer(
+    model::M,
+    result::R,
+    Nparameter::Integer,
+    F::Type{I}
+    ) where {M<:AbstractModelWrapper, R<:AbstractResult, I<:Integer}
     val = Vector{typeof(model.val)}(undef, Nparameter)
     result = Vector{typeof(result)}(undef, Nparameter)
     index = F.(1:Nparameter)
@@ -103,8 +108,8 @@ end
 function shuffle!(
     buffer::ModelParameterBuffer,
     algorithm::AbstractVector{A},
-    model::AbstractVector
-    ) where {A<:AbstractAlgorithm}
+    model::AbstractVector{M}
+    ) where {A<:AbstractAlgorithm, M<:AbstractModelWrapper}
     ## Shuffle Model parameter and log objective results
     @inbounds for idx in Base.OneTo(length(buffer.val))
         buffer.val[idx] = model[buffer.index[idx]].val
