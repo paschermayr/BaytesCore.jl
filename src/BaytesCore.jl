@@ -2,7 +2,7 @@ module BaytesCore
 
 ############################################################################################
 #Import External packages
-import Base: Base, split
+import Base: Base, split, resize!
 import Random: Random, shuffle!
 import LogExpFunctions: LogExpFunctions, logsumexp, logaddexp
 
@@ -18,6 +18,7 @@ include("Dispatch/Dispatch.jl")
 include("Core/Core.jl")
 include("Sampling/Sampling.jl")
 include("Tune/Tune.jl")
+include("Buffer/Buffer.jl")
 
 ############################################################################################
 #export
