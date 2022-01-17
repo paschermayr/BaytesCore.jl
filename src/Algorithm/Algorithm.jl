@@ -11,7 +11,7 @@ algorithms(algorithms.jl), kernels inside an Baytes package (kernel.jl) can be u
 ############################################################################################
 # Include files
 include("algorithms.jl")
-include("kernel.jl")
+include("kernels.jl")
 include("utility.jl")
 
 ############################################################################################
