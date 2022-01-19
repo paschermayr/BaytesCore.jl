@@ -97,7 +97,7 @@ Contains information about data structure.
 # Fields
 $(TYPEDFIELDS)
 """
-struct DataTune{D<:DataStructure,C<:ArrayConfig,M}
+struct DataTune{D<:DataStructure,C<:Union{Nothing, ArrayConfig},M}
     "Subtype of DataStructure"
     structure::D
     "Data dimension configuration."
@@ -105,14 +105,21 @@ struct DataTune{D<:DataStructure,C<:ArrayConfig,M}
     "Treatment of missing data."
     miss::M
     function DataTune(
-        structure::D, config::C, miss=nothing
-    ) where {D<:DataStructure,C<:ArrayConfig}
-        return new{D,C,Nothing}(structure, config, miss)
+        structure::D, config::C, miss::M
+    ) where {D<:DataStructure,C<:Union{Nothing, ArrayConfig}, M}
+        return new{D,C,M}(structure, config, miss)
     end
 end
 
-function DataTune(data::AbstractArray{T}, structure=Batch()) where {T}
-    return DataTune(structure, ArrayConfig(data))
+function DataTune(data, structure::Batch, miss=nothing)
+    return DataTune(structure, nothing, miss)
+end
+function DataTune(data::AbstractArray{T}, structure::D, miss=nothing
+) where {T, D<:Union{SubSampled, Expanding, Rolling}}
+    return DataTune(structure, ArrayConfig(data), miss)
+end
+function DataTune(data, miss=nothing)
+    return DataTune(Batch(), nothing, miss)
 end
 
 ############################################################################################
