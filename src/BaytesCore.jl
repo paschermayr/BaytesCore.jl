@@ -18,8 +18,8 @@ using Statistics: Statistics, middle
 include("Algorithm/Algorithm.jl")
 include("Core/Core.jl")
 include("Tempering/Tempering.jl")
-include("Tune/Tune.jl")
 include("Buffer/Buffer.jl")
+include("Sampling/Sampling.jl")
 
 ############################################################################################
 #export
