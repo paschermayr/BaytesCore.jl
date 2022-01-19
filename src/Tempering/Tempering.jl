@@ -1,8 +1,9 @@
 ############################################################################################
 # Include files
-include("tempering.jl")
-include("jitter.jl")
-include("chains.jl")
+include("default.jl")
+include("iteration.jl")
+include("joint.jl")
+include("tune.jl")
 
 ############################################################################################
 # Export

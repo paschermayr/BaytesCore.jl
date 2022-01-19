@@ -11,12 +11,13 @@ using DocStringExtensions:
 using ArgCheck: ArgCheck, @argcheck
 using UnPack: @unpack, @pack!
 using Random: Random, AbstractRNG, GLOBAL_RNG
+using Statistics: Statistics, middle
 
 ############################################################################################
 #Import
 include("Algorithm/Algorithm.jl")
 include("Core/Core.jl")
-include("Sampling/Sampling.jl")
+include("Tempering/Tempering.jl")
 include("Tune/Tune.jl")
 include("Buffer/Buffer.jl")
 
