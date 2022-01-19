@@ -81,30 +81,41 @@ $(TYPEDFIELDS)
 """
 struct IterationTempering{T<:AbstractFloat} <: TemperingMethod
     "current temperature for each chain."
-    val::Vector{T}
+    val::ValueHolder{T}
     "Tuning parameter for temperature adjustment."
-    parameter::Vector{TemperingParameter{T}}
-    function IterationTempering(val::Vector{T}, parameter::Vector{TemperingParameter{T}}
+    parameter::TemperingParameter{T}
+    function IterationTempering(val::ValueHolder{T}, parameter::TemperingParameter{T}
     ) where {T<:AbstractFloat}
-        @argcheck all(0.0 < val[iter] <= 1.0 for iter in eachindex(val))
+        @argcheck 0.0 < val.current <= 1.0
         return new{T}(val, parameter)
     end
 end
 
-function IterationTempering(::Type{T}, default::TemperDefault{B, F}, idx::Integer
+function IterationTempering(::Type{T}, adaption::B, val::F, idx::Integer
 ) where {T<:AbstractFloat, B<:UpdateBool, F<:AbstractFloat}
     # Assign temperature adaption
-    parameter = TemperingParameter(T, default.val, idx)
+    parameter = TemperingParameter(T, val, idx)
     # Assign initial temperature
-    val = init(T, default, parameter)
+    val₀ = init(T, adaption, val, parameter)
     # Return tuning struct
-    return IterationTempering(ValueHolder(val), parameter)
+    return IterationTempering(ValueHolder(val₀), parameter)
+end
+
+############################################################################################
+function update!(tempering::IterationTempering, adaption::UpdateTrue, index::Integer)
+    # Compute new temperature
+    tempering.val.current = update(tempering.parameter, index)
+    return tempering.val.current
+end
+function update!(tempering::IterationTempering, adaption::UpdateFalse, index::Integer)
+    return tempering.val.current
 end
 
 ############################################################################################
 # Export
 export
     IterationTempering,
+    TemperingParameter,
     init,
     update,
-    TemperingParameter
+    update!

@@ -105,16 +105,19 @@ struct JointTempering{T<:AbstractFloat} <: TemperingMethod
     end
 end
 
-function update!(tempering::JointTempering, weights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
+############################################################################################
+function update!(tempering::JointTempering, adaption::UpdateTrue, weights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
     # Update weights
     for iter in eachindex(tempering.weights)
         tempering.weights[iter] = weights[iter]
     end
     # Compute new temperature
     tempering.val.current = update(tempering.weights, tempering.val.current, ESSTarget)
-    return nothing
+    return tempering.val.current
 end
-
+function update!(tempering::JointTempering, adaption::UpdateFalse, weights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
+    return tempering.val.current
+end
 
 ############################################################################################
 # Export
