@@ -107,6 +107,12 @@ struct JointTempering{A<:UpdateBool, T<:AbstractFloat} <: TemperingMethod
     end
 end
 
+function JointTempering(::Type{T}, adaption::B, val::F, chains::Integer
+) where {T<:AbstractFloat, B<:UpdateBool, F<:AbstractFloat}
+    # Return tuning struct
+    return JointTempering(adaption, ValueHolder(T(val)), zeros(T, chains))
+end
+
 ############################################################################################
 function update!(tempering::JointTempering, adaption::UpdateTrue, ℓweights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
     # Update weights
