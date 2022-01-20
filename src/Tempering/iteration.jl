@@ -79,15 +79,17 @@ Tuning container for iteration uptdates of temperature.
 # Fields
 $(TYPEDFIELDS)
 """
-struct IterationTempering{T<:AbstractFloat} <: TemperingMethod
+struct IterationTempering{A<:UpdateBool, T<:AbstractFloat} <: TemperingMethod
+    "Checks if temperature will be updated after new iterations"
+    adaption::A
     "current temperature for each chain."
     val::ValueHolder{T}
     "Tuning parameter for temperature adjustment."
     parameter::TemperingParameter{T}
-    function IterationTempering(val::ValueHolder{T}, parameter::TemperingParameter{T}
-    ) where {T<:AbstractFloat}
+    function IterationTempering(adaption::A, val::ValueHolder{T}, parameter::TemperingParameter{T}
+    ) where {A<:UpdateBool,T<:AbstractFloat}
         @argcheck 0.0 < val.current <= 1.0
-        return new{T}(val, parameter)
+        return new{A,T}(adaption, val, parameter)
     end
 end
 
@@ -98,7 +100,7 @@ function IterationTempering(::Type{T}, adaption::B, val::F, idx::Integer
     # Assign initial temperature
     val₀ = init(T, adaption, val, parameter)
     # Return tuning struct
-    return IterationTempering(ValueHolder(val₀), parameter)
+    return IterationTempering(adaption, ValueHolder(val₀), parameter)
 end
 
 ############################################################################################
@@ -110,7 +112,9 @@ end
 function update!(tempering::IterationTempering, adaption::UpdateFalse, index::Integer)
     return tempering.val.current
 end
-
+function update!(tempering::IterationTempering, index::Integer)
+    return update!(tempering, tempering.adaption, index)
+end
 ############################################################################################
 # Export
 export

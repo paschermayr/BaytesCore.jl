@@ -1,8 +1,4 @@
 ############################################################################################
-"Abstract type where more tempering methods have to be dispatched on."
-abstract type TemperingMethod end
-
-############################################################################################
 """
 $(TYPEDEF)
 
@@ -45,4 +41,4 @@ end
 
 ############################################################################################
 # Export
-export TemperDefault, TemperingMethod, split
+export TemperDefault, split

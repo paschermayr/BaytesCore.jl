@@ -93,30 +93,38 @@ Tuning container for joint uptdates of temperature.
 # Fields
 $(TYPEDFIELDS)
 """
-struct JointTempering{T<:AbstractFloat} <: TemperingMethod
+struct JointTempering{A<:UpdateBool, T<:AbstractFloat} <: TemperingMethod
+    "Checks if temperature will be updated after new iterations"
+    adaption::A
     "current temperature."
     val::ValueHolder{T}
     "Buffer for weights used to adapt temperature"
     weights::Vector{T}
-    function JointTempering(val::ValueHolder{T}, weights::Vector{T}
-    ) where {T<:AbstractFloat}
+    function JointTempering(adaption::A, val::ValueHolder{T}, weights::Vector{T}
+    ) where {A<:UpdateBool,T<:AbstractFloat}
         @argcheck 0.0 < val.current <= 1.0
-        return new{T}(val, weights)
+        return new{A,T}(adaption, val, weights)
     end
 end
 
 ############################################################################################
-function update!(tempering::JointTempering, adaption::UpdateTrue, weights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
+function update!(tempering::JointTempering, adaption::UpdateTrue, ℓweights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
     # Update weights
     for iter in eachindex(tempering.weights)
-        tempering.weights[iter] = weights[iter]
+        tempering.weights[iter] = ℓweights[iter]
     end
+    #Normalize
+    tempering.weights .-= logsumexp(tempering.weights)
+
     # Compute new temperature
     tempering.val.current = update(tempering.weights, tempering.val.current, ESSTarget)
     return tempering.val.current
 end
 function update!(tempering::JointTempering, adaption::UpdateFalse, weights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
     return tempering.val.current
+end
+function update!(tempering::JointTempering, weights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
+    return update!(tempering, tempering.adaption, weights, ESSTarget)
 end
 
 ############################################################################################
