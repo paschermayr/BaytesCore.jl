@@ -113,13 +113,15 @@ function update!(tempering::JointTempering, adaption::UpdateTrue, ℓweights::Ab
     for iter in eachindex(tempering.weights)
         tempering.weights[iter] = ℓweights[iter]
     end
-    #Normalize
+    #Normalize numerically stable
     tempering.weights .-= logsumexp(tempering.weights)
-
+    tempering.weights .= exp.(tempering.weights)
     # Compute new temperature
     tempering.val.current = update(tempering.weights, tempering.val.current, ESSTarget)
     return tempering.val.current
 end
+
+
 function update!(tempering::JointTempering, adaption::UpdateFalse, weights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
     return tempering.val.current
 end
