@@ -118,9 +118,6 @@ function DataTune(data::AbstractArray{T}, structure::D, miss=nothing
 ) where {T, D<:Union{SubSampled, Expanding, Rolling}}
     return DataTune(structure, ArrayConfig(data), miss)
 end
-function DataTune(data, miss=nothing)
-    return DataTune(Batch(), nothing, miss)
-end
 
 ############################################################################################
 """
