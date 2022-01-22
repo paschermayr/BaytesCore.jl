@@ -27,7 +27,7 @@ struct JitterTune{B<:UpdateBool}
         min::Integer=1,
         max::Integer=30
     ) where {B<:UpdateBool}
-        ArgCheck.@argcheck 0 < min < max
+        ArgCheck.@argcheck 0 < min <= max
         ArgCheck.@argcheck 0.0 < threshold <= 1.0 "threshold needs to be positive"
         return new{B}(adaption, Iterator(0), threshold, min, max)
     end
