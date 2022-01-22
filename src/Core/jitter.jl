@@ -10,7 +10,9 @@ Container that determines if jittering has to be applied
 # Fields
 $(TYPEDFIELDS)
 """
-struct JitterTune
+struct JitterTune{B<:UpdateBool}
+    "Bolean if adaptive jittering is applied. If false, always max steps are jittered."
+    adaption::B
     "Number of jitttering steps performed while jittering"
     Nsteps::Iterator
     "Jittering threshold for correlation of parameter."
@@ -20,13 +22,14 @@ struct JitterTune
     "Maximum amount of jittering steps."
     max::Int64
     function JitterTune(
+        adaption::B,
         threshold::Float64,
         min::Integer=1,
         max::Integer=30
-    )
+    ) where {B<:UpdateBool}
         ArgCheck.@argcheck 0 < min < max
         ArgCheck.@argcheck 0.0 < threshold <= 1.0 "threshold needs to be positive"
-        return new(Iterator(0), threshold, min, max)
+        return new{B}(adaption, Iterator(0), threshold, min, max)
     end
 end
 
@@ -46,7 +49,7 @@ Check if we can stop jittering step based on correlation ρ.
 ```
 
 """
-function jitter!(tune::JitterTune, ρ::T) where {T<:AbstractFloat}
+function jitter!(tune::JitterTune, adaption::UpdateTrue, ρ::T) where {T<:AbstractFloat}
     ## Add step to Nsteps
     update!(tune.Nsteps)
     ## Check if jittering has to be continued
@@ -62,6 +65,22 @@ function jitter!(tune::JitterTune, ρ::T) where {T<:AbstractFloat}
     else
         return true
     end
+end
+
+function jitter!(tune::JitterTune, adaption::UpdateFalse, ρ::T) where {T<:AbstractFloat}
+    ## Add step to Nsteps
+    update!(tune.Nsteps)
+    ## Continue jittering until max steps are reached
+    #!NOTE: Need to start with >= tune.max and < tune.min conditions, and then with ρ
+    if tune.Nsteps.current >= tune.max
+        return false
+    else
+        return true
+    end
+end
+
+function jitter!(tune::JitterTune, ρ::T) where {T<:AbstractFloat}
+    return jitter!(tune, tune.adaption, ρ)
 end
 
 ############################################################################################
