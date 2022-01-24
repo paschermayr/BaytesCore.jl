@@ -20,53 +20,23 @@ Inplace version of [`propose`](@ref).
 """
 function propose! end
 
+#NOTE: These functions are needed so sampler can communicate with eacher other in SMC.
 """
     $(FUNCTIONNAME)
-Substitute result with new result.
+Substitute result position in algorithm with new result.
 """
 function result! end
 
 """
     $(FUNCTIONNAME)
-Show log density result.
+Show log density result of algorithm.
 """
 function get_result end
-
 """
     $(FUNCTIONNAME)
-Show tagged parameter.
+Get log objective function of algorithm..
 """
-function get_tagged end
-
-"""
-    $(FUNCTIONNAME)
-Get log likelihood of sampler combination.
-"""
-function get_loglik end
-
-"""
-    $(FUNCTIONNAME)
-Get predictions of sampler combination.
-"""
-function get_prediction end
-
-"""
-    $(FUNCTIONNAME)
-Get phase tune struct of sampler combination.
-"""
-function get_phase end
-
-"""
-    $(FUNCTIONNAME)
-Get current iteration of sampler combination.
-"""
-function get_iteration end
-
-"""
-    $(FUNCTIONNAME)
-Show values of Algorihm diagnostics.
-"""
-function generate_showvalues end
+function get_ℓweight end
 
 #########################################
 """
@@ -93,6 +63,28 @@ function infer end
 Show results of input type, in this case a vector of `AbstractDiagnostics` of corresponding `AbstractAlgorithm`.
 """
 function results end
+
+"""
+    $(FUNCTIONNAME)
+Show values of Algorihm diagnostics.
+"""
+function generate_showvalues end
+
+"""
+    $(FUNCTIONNAME)
+Return prediction of AbstractAlgorithm diagnostics.
+"""
+function get_prediction end
+
+#########################################
+
+
+
+"""
+    $(FUNCTIONNAME)
+Show tagged parameter.
+"""
+function get_tagged end
 
 ############################################################################################
 # Export
