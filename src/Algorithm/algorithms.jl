@@ -12,31 +12,39 @@ abstract type AbstractAlgorithm end
     $(FUNCTIONNAME)
 Propose new parameter with given algorithm, keeping objective fixed.
 """
-function propose end
+function propose(_rng, algorithm, objective) end
 
 """
     $(FUNCTIONNAME)
 Inplace version of [`propose`](@ref).
 """
-function propose! end
+function propose!(_rng, algorithm, model, data, temperature, update) end
 
 #NOTE: These functions are needed so sampler can communicate with eacher other in SMC.
 """
     $(FUNCTIONNAME)
 Substitute result position in algorithm with new result.
 """
-function result! end
+function result!(algorithm::AbstractAlgorithm, result) end
 
 """
     $(FUNCTIONNAME)
 Show log density result of algorithm.
 """
-function get_result end
+function get_result(algorithm::AbstractAlgorithm) end
 """
     $(FUNCTIONNAME)
 Get log objective function of algorithm..
 """
-function get_ℓweight end
+function get_ℓweight(algorithm::AbstractAlgorithm) end
+
+"""
+    $(FUNCTIONNAME)
+Get tagged parameter of AbstractAlgorithm..
+"""
+function get_tagged(algorithm::AbstractAlgorithm)
+    return algorithm.tune.tagged
+end
 
 #########################################
 """
@@ -44,6 +52,14 @@ $(TYPEDEF)
 Abstract type to construct Algorithms. New algorithm needs to define a functor to initiate corresponding `AbstractAlgorithm`.
 """
 abstract type AbstractConstructor end
+
+"""
+    $(FUNCTIONNAME)
+Return tagged symbol of AbstractConstructor.
+"""
+function get_sym(constructor::AbstractConstructor)
+    return constructor.sym
+end
 
 #########################################
 """
@@ -54,37 +70,29 @@ abstract type AbstractDiagnostics end
 
 """
     $(FUNCTIONNAME)
-Infer output type from input. Infer `AbstractDiagnostics` from corresponding `AbstractAlgorithm`
-"""
-function infer end
-
-"""
-    $(FUNCTIONNAME)
 Show results of input type, in this case a vector of `AbstractDiagnostics` of corresponding `AbstractAlgorithm`.
 """
-function results end
+function results(diagnosticsᵛ::AbstractVector{AbstractDiagnostics}, algorithm, Ndigits, quantiles) end
 
 """
     $(FUNCTIONNAME)
 Show values of Algorihm diagnostics.
 """
-function generate_showvalues end
+function generate_showvalues(diagnostics::AbstractDiagnostics) end
 
 """
     $(FUNCTIONNAME)
 Return prediction of AbstractAlgorithm diagnostics.
 """
-function get_prediction end
-
-#########################################
-
-
+function get_prediction(diagnostics::AbstractDiagnostics)
+    return diagnostics.prediction
+end
 
 """
     $(FUNCTIONNAME)
-Show tagged parameter.
+Infer output type from input. Infer `AbstractDiagnostics` from corresponding `AbstractAlgorithm`
 """
-function get_tagged end
+function infer(_rng, diagnostics::Type{AbstractDiagnostics}, algorithm, model, data) end
 
 ############################################################################################
 # Export
