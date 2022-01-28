@@ -1,4 +1,4 @@
-#!NOTE: This section defines functions that need to be overloaded in order for custom Kernel (inside a Baytes AbstractAlgorithm) to work with corresponding Baytes package.
+#!NOTE: This section defines functions that need to be overloaded in order for custom Kernel inside an existing Baytes AbstractAlgorithm to work with corresponding Baytes package.
 ############################################################################################
 
 #########################################

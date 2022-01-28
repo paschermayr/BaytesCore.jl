@@ -2,6 +2,7 @@
 ############################################################################################
 
 #########################################
+#!NOTE: New algorithm needs to be a subtype of AbstractAlgorithm, and functions for propose and propose! need to be provided.
 """
 $(TYPEDEF)
 Abstract super type for Algorithms. New algorithm needs to be subtype of `AbstractAlgorithm`.
@@ -11,32 +12,64 @@ abstract type AbstractAlgorithm end
 """
     $(FUNCTIONNAME)
 Propose new parameter with given algorithm, keeping objective fixed.
+
+# Examples
+```julia
+propose(_rng::AbstractRNG, algorithm::AbstractAlgorithm, objective::AbstractObjective)
+```
+
 """
-function propose(_rng, algorithm, objective) end
+function propose end
 
 """
     $(FUNCTIONNAME)
 Inplace version of [`propose`](@ref).
-"""
-function propose!(_rng, algorithm, model, data, temperature, update) end
 
-#NOTE: These functions are needed so sampler can communicate with eacher other in SMC.
+# Examples
+```julia
+propose!(_rng::AbstractRNG, algorithm::AbstractAlgorithm, model::AbstractModelWrapper, data, temperature, update)
+```
+
+"""
+function propose! end
+
+#########################################
+#NOTE: These functions are needed so sampler can communicate with eacher other in SMC. Not needed outside SMC.
 """
     $(FUNCTIONNAME)
 Substitute result position in algorithm with new result.
+
+# Examples
+```julia
+result!(algorithm::AbstractAlgorithm, result::AbstractResult)
+```
+
 """
-function result!(algorithm::AbstractAlgorithm, result) end
+function result! end
 
 """
     $(FUNCTIONNAME)
 Show log density result of algorithm.
+
+# Examples
+```julia
+get_result(algorithm::AbstractAlgorithm)
+```
+
 """
-function get_result(algorithm::AbstractAlgorithm) end
+function get_result end
+
 """
     $(FUNCTIONNAME)
-Get log objective function of algorithm..
+Get log objective result of algorithm.
+
+# Examples
+```julia
+get_ℓweight(algorithm::AbstractAlgorithm)
+```
+
 """
-function get_ℓweight(algorithm::AbstractAlgorithm) end
+function get_ℓweight end
 
 """
     $(FUNCTIONNAME)
@@ -47,6 +80,7 @@ function get_tagged(algorithm::AbstractAlgorithm)
 end
 
 #########################################
+#!NOTE: New Algorithm needs a constructor so given rng, model, data, chains, temperature, algorithm can be initiated.
 """
 $(TYPEDEF)
 Abstract type to construct Algorithms. New algorithm needs to define a functor to initiate corresponding `AbstractAlgorithm`.
@@ -62,6 +96,7 @@ function get_sym(constructor::AbstractConstructor)
 end
 
 #########################################
+#!NOTE: New Algorithm needs to return a new model parameter and diagnostics that are a subtype of AbstractDiagnostics.
 """
 $(TYPEDEF)
 Abstract super type for Algorithm Diagnostics. Once `AbstractAlgorithm` has run, return new model parameter and `AbstractDiagnostics` of `AbstractAlgorithm`.
@@ -71,18 +106,31 @@ abstract type AbstractDiagnostics end
 """
     $(FUNCTIONNAME)
 Show results of input type, in this case a vector of `AbstractDiagnostics` of corresponding `AbstractAlgorithm`.
+
+# Examples
+```julia
+results(diagnosticsᵛ::AbstractVector{AbstractDiagnostics}, algorithm, Ndigits, quantiles)
+```
+
 """
-function results(diagnosticsᵛ::AbstractVector{AbstractDiagnostics}, algorithm, Ndigits, quantiles) end
+function results end
 
 """
     $(FUNCTIONNAME)
 Show values of Algorihm diagnostics.
+
+# Examples
+```julia
+generate_showvalues(diagnostics::AbstractDiagnostics)
+```
+
 """
-function generate_showvalues(diagnostics::AbstractDiagnostics) end
+function generate_showvalues end
 
 """
     $(FUNCTIONNAME)
 Return prediction of AbstractAlgorithm diagnostics.
+
 """
 function get_prediction(diagnostics::AbstractDiagnostics)
     return diagnostics.prediction
@@ -91,8 +139,14 @@ end
 """
     $(FUNCTIONNAME)
 Infer output type from input. Infer `AbstractDiagnostics` from corresponding `AbstractAlgorithm`
+
+# Examples
+```julia
+infer(_rng, diagnostics::Type{AbstractDiagnostics}, algorithm, model, data)
+```
+
 """
-function infer(_rng, diagnostics::Type{AbstractDiagnostics}, algorithm, model, data) end
+function infer end
 
 ############################################################################################
 # Export

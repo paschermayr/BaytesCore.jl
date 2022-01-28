@@ -120,7 +120,7 @@ function shuffle!(
     @inbounds for idx in Base.OneTo(length(buffer.val))
         model[idx].val = buffer.val[idx]
         result!(algorithm[idx], buffer.result[idx])
-        #!NOTE: Cannot switch from get_loglik to result.ll because sampler treats ll differently
+        #!NOTE: Cannot switch from get_ℓweight to result.ll because samplers treat weights differently
         buffer.weight[idx] = get_ℓweight(algorithm[idx])
     end
     return nothing
