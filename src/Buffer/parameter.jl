@@ -108,20 +108,23 @@ end
 function shuffle!(
     buffer::ModelParameterBuffer,
     algorithm::AbstractVector{A},
-    model::AbstractVector{M}
-    ) where {A<:AbstractAlgorithm, M<:AbstractModelWrapper}
-    ## Shuffle Model parameter and log objective results
+    model::AbstractVector{M},
+    weights::AbstractVector{T}
+    ) where {A<:AbstractAlgorithm, M<:AbstractModelWrapper, T<:Real}
+    ## Shuffle Model parameter, log objective results and weights
     @inbounds for idx in Base.OneTo(length(buffer.val))
         buffer.val[idx] = model[buffer.index[idx]].val
         buffer.result[idx] = get_result(algorithm[buffer.index[idx]])
+        buffer.weight[idx] = weights[buffer.index[idx]]
     end
     ## Return back to appropriate place
     #!NOTE: Cannot be performed in same loop as before
     @inbounds for idx in Base.OneTo(length(buffer.val))
         model[idx].val = buffer.val[idx]
         result!(algorithm[idx], buffer.result[idx])
+        weights[idx] = buffer.weight[idx]
         #!NOTE: Cannot switch from get_ℓweight to result.ll because samplers treat weights differently
-        buffer.weight[idx] = get_ℓweight(algorithm[idx])
+        #buffer.weight[idx] = get_ℓweight(algorithm[idx])
     end
     return nothing
 end
