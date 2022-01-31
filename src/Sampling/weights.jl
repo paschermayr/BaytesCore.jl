@@ -108,7 +108,6 @@ function computeESS(weightsₙ::Vector{T}) where {T<:AbstractFloat}
 end
 function computeESS(weights::ParameterWeights)
     weights.buffer .= exp.(weights.ℓweightsₙ)
-    return 1.0 / sum(abs2, weights.buffer)
     return min(eltype(weights.buffer)(length(weights.buffer)), 1.0 / sum(abs2, weights.buffer))
 end
 
