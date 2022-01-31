@@ -96,7 +96,7 @@ end
 ############################################################################################
 """
 $(SIGNATURES)
-Compute effectice sample size of particle filter via normalized log weights.
+Stable version of computing effectice sample size of particle filter via normalized log weights.
 
 # Examples
 ```julia
@@ -104,11 +104,12 @@ Compute effectice sample size of particle filter via normalized log weights.
 
 """
 function computeESS(weightsₙ::Vector{T}) where {T<:AbstractFloat}
-    return 1.0 / sum(abs2, weightsₙ)
+    return min(T(length(weightsₙ)), 1.0 / sum(abs2, weightsₙ))
 end
 function computeESS(weights::ParameterWeights)
     weights.buffer .= exp.(weights.ℓweightsₙ)
     return 1.0 / sum(abs2, weights.buffer)
+    return min(eltype(weights.buffer)(length(weights.buffer)), 1.0 / sum(abs2, weights.buffer))
 end
 
 ############################################################################################

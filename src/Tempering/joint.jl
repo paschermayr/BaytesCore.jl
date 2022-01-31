@@ -2,7 +2,7 @@
 """
 $(SIGNATURES)
 Compute ESS as a function of proposed temperature `λ` against current temperature `λₜ₋₁`.
-
+Note that weights are in the original space, and should have temperature == 1.
 # Examples
 ```julia
 ```
@@ -36,8 +36,8 @@ end
 ############################################################################################
 """
 $(SIGNATURES)
-Temperature adaption that takes into account updating schedule.
-
+Temperature adaption that takes into account updating schedule, see Chopin, Papaspiliopoulos (2020).
+Note that this version allows us to user weights currently tempered with λₜ₋₁ without the need to rescale to temperature 1.0.
 # Examples
 ```julia
 ```
