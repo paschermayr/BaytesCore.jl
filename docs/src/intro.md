@@ -1,3 +1,3 @@
 # Introduction
 
-Yet to be properly done.
+Yet to be done.

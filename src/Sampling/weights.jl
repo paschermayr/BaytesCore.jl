@@ -96,6 +96,20 @@ end
 ############################################################################################
 """
 $(SIGNATURES)
+Stable version of computing weighted incremental weight average.
+
+# Examples
+```julia
+```
+
+"""
+function weightedincrement(weights::ParameterWeights)
+    return logsumexp(weights.ℓweightsₙ[iter] + weights.ℓweights[iter] for iter in eachindex(weights.ℓweightsₙ))
+end
+
+############################################################################################
+"""
+$(SIGNATURES)
 Stable version of computing effectice sample size of particle filter via normalized log weights.
 
 # Examples
@@ -137,4 +151,5 @@ export
     ParameterWeights,
     draw!,
     normalize!,
+    weightedincrement,
     computeESS
