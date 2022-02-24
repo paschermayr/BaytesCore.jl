@@ -54,6 +54,8 @@ struct SampleDefault{
     iterations::Int64
     "Burn in samples."
     burnin::Int64
+    "Number of consecutive samples taken for diagnostics output."
+    thinning::Int64
     "Boolean if trace and algorithm should be safed to working directory."
     safeoutput::Bool
     "Boolean if summary statistics should be calculated."
@@ -68,12 +70,14 @@ struct SampleDefault{
         chains=4,
         iterations=2000,
         burnin=max(1, Int64(floor(iterations / 10))),
+        thinning = 1,
         safeoutput=false,
         printoutput=true,
         printdefault=PrintDefault(),
         report=ProgressReport(),
     )
         ArgCheck.@argcheck 0 < chains
+        ArgCheck.@argcheck 0 < thinning
         ArgCheck.@argcheck 0 <= burnin < iterations
         return new{
         typeof(dataformat), typeof(tempering), typeof(report)
@@ -83,6 +87,7 @@ struct SampleDefault{
             chains,
             iterations,
             burnin,
+            thinning,
             safeoutput,
             printoutput,
             printdefault,
