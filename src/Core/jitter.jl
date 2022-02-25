@@ -71,7 +71,6 @@ function jitter!(tune::JitterTune, adaption::UpdateFalse, ρ::T) where {T<:Abstr
     ## Add step to Nsteps
     update!(tune.Nsteps)
     ## Continue jittering until max steps are reached
-    #!NOTE: Need to start with >= tune.max and < tune.min conditions, and then with ρ
     if tune.Nsteps.current >= tune.max
         return false
     else

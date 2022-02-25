@@ -2,7 +2,7 @@
 """
 $(SIGNATURES)
 Compute ESS as a function of proposed temperature `λ` against current temperature `λₜ₋₁`.
-Note that weights are in the original space, and should have temperature == 1.
+Note that weights are in the original (non-log) space, and should have temperature == 1.
 # Examples
 ```julia
 ```

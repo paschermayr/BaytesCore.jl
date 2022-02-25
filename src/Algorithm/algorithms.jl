@@ -59,6 +59,7 @@ get_result(algorithm::AbstractAlgorithm)
 """
 function get_result end
 
+#=
 """
     $(FUNCTIONNAME)
 Get log objective result of algorithm.
@@ -70,7 +71,7 @@ get_ℓweight(algorithm::AbstractAlgorithm)
 
 """
 function get_ℓweight end
-
+=#
 """
     $(FUNCTIONNAME)
 Get tagged parameter of AbstractAlgorithm..
@@ -105,6 +106,15 @@ abstract type AbstractDiagnostics end
 
 """
     $(FUNCTIONNAME)
+Return prediction of AbstractAlgorithm diagnostics.
+
+"""
+function get_prediction(diagnostics::AbstractDiagnostics)
+    return get_prediction(diagnostics.base)
+end
+
+"""
+    $(FUNCTIONNAME)
 Show results of input type, in this case a vector of `AbstractDiagnostics` of corresponding `AbstractAlgorithm`.
 
 # Examples
@@ -126,15 +136,6 @@ generate_showvalues(diagnostics::AbstractDiagnostics)
 
 """
 function generate_showvalues end
-
-"""
-    $(FUNCTIONNAME)
-Return prediction of AbstractAlgorithm diagnostics.
-
-"""
-function get_prediction(diagnostics::AbstractDiagnostics)
-    return diagnostics.prediction
-end
 
 """
     $(FUNCTIONNAME)
