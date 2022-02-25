@@ -7,14 +7,14 @@ Stores in diagnostics.
 # Fields
 $(TYPEDFIELDS)
 """
-struct AcceptStatistic{T<:AbstractFloat}
+struct AcceptStatistic
     "Acceptance rate"
-    rate::T
+    rate::Float64
     "Step accepted or rejected"
     accepted::Bool
     function AcceptStatistic(rate::T, accepted::Bool) where {T<:AbstractFloat}
         ArgCheck.@argcheck 0.0 <= rate <= 1.0 "Acceptance rate is out of boundaries"
-        return new{T}(rate, accepted)
+        return new(rate, accepted)
     end
 end
 function AcceptStatistic(_rng::Random.AbstractRNG, ℓacceptrate::F) where {F<:AbstractFloat}
