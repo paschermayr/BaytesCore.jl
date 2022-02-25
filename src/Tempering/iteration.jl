@@ -82,8 +82,8 @@ $(TYPEDFIELDS)
 struct IterationTempering{A<:UpdateBool, T<:AbstractFloat} <: TemperingMethod
     "Checks if temperature will be updated after new iterations"
     adaption::A
-    "current temperature for each chain."
-    val::ValueHolder{T}
+    "Initial temperature for tempering."
+    initial::ValueHolder{T}
     "Tuning parameter for temperature adjustment."
     parameter::TemperingParameter{T}
     function IterationTempering(adaption::A, val::ValueHolder{T}, parameter::TemperingParameter{T}
@@ -106,11 +106,10 @@ end
 ############################################################################################
 function update!(tempering::IterationTempering, adaption::UpdateTrue, index::Integer)
     # Compute new temperature
-    tempering.val.current = update(tempering.parameter, index)
-    return tempering.val.current
+    return update(tempering.parameter, index)
 end
 function update!(tempering::IterationTempering, adaption::UpdateFalse, index::Integer)
-    return tempering.val.current
+    return tempering.initial.current
 end
 function update!(tempering::IterationTempering, index::Integer)
     return update!(tempering, tempering.adaption, index)
