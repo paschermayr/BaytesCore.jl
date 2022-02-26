@@ -129,7 +129,7 @@ function update!(tempering::JointTempering, adaption::UpdateTrue, ℓweights::Ab
     return tempering.val.current
 end
 
-
+############################################################################################
 function update!(tempering::JointTempering, adaption::UpdateFalse, weights::AbstractVector)
     return tempering.val.current
 end
@@ -138,9 +138,24 @@ function update!(tempering::JointTempering, weights::AbstractVector)
 end
 
 ############################################################################################
+"""
+$(SIGNATURES)
+Return initial temperature of tuning container.
+
+# Examples
+```julia
+```
+
+"""
+function initial(tempertune::JointTempering)
+    return tempertune.val.current
+end
+
+############################################################################################
 # Export
 
 export
     JointTempering,
+    initial,
     update,
     update!

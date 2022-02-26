@@ -114,11 +114,27 @@ end
 function update!(tempering::IterationTempering, index::Integer)
     return update!(tempering, tempering.adaption, index)
 end
+
+############################################################################################
+"""
+$(SIGNATURES)
+Return initial temperature of tuning container.
+
+# Examples
+```julia
+```
+
+"""
+function initial(tempertune::IterationTempering)
+    return tempertune.initial.current
+end
+
 ############################################################################################
 # Export
 export
     IterationTempering,
     TemperingParameter,
     init,
+    initial,
     update,
     update!
