@@ -46,11 +46,11 @@ function update(weights::AbstractVector{T}, λₜ₋₁::T, ESSTarget::T) where 
     # Assing ESS closure
     ESSDifference = get_ESSDifference(weights, λₜ₋₁, ESSTarget)
     # Check if ESS > ESSTarget; !NOTE: Compute ESS, not ESSDifference!
-    if weightedESS(weights, 1.0, λₜ₋₁) >= ESSTarget
+    if weightedESS(weights, T(1.0), λₜ₋₁) >= ESSTarget
         return T(1.0)
     end
     # Else tune for new stepsize
-    λ = bisect(ESSDifference, λₜ₋₁, 1.0)
+    λ = bisect(ESSDifference, λₜ₋₁, T(1.0))
     return λ
 end
 
@@ -97,23 +97,26 @@ struct JointTempering{A<:UpdateBool, T<:AbstractFloat} <: TemperingMethod
     adaption::A
     "current temperature."
     val::ValueHolder{T}
+    "Target Effective Sample Size."
+    ESSTarget::ValueHolder{T}
     "Buffer for weights used to adapt temperature"
     weights::Vector{T}
-    function JointTempering(adaption::A, val::ValueHolder{T}, weights::Vector{T}
+    function JointTempering(adaption::A, val::ValueHolder{T}, ESSTarget::ValueHolder{T}, weights::Vector{T}
     ) where {A<:UpdateBool,T<:AbstractFloat}
         @argcheck 0.0 < val.current <= 1.0
-        return new{A,T}(adaption, val, weights)
+        @argcheck 0.0 < ESSTarget.current <= length(weights)
+        return new{A,T}(adaption, val, ESSTarget, weights)
     end
 end
 
-function JointTempering(::Type{T}, adaption::B, val::F, chains::Integer
-) where {T<:AbstractFloat, B<:UpdateBool, F<:AbstractFloat}
+function JointTempering(::Type{T}, adaption::B, val::F, ESSTarget::S, chains::Integer
+) where {T<:AbstractFloat, B<:UpdateBool, F<:AbstractFloat, S<:AbstractFloat}
     # Return tuning struct
-    return JointTempering(adaption, ValueHolder(T(val)), zeros(T, chains))
+    return JointTempering(adaption, ValueHolder(T(val)), ValueHolder(T(ESSTarget)), zeros(T, chains))
 end
 
 ############################################################################################
-function update!(tempering::JointTempering, adaption::UpdateTrue, ℓweights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
+function update!(tempering::JointTempering, adaption::UpdateTrue, ℓweights::AbstractVector)
     # Update weights
     for iter in eachindex(tempering.weights)
         tempering.weights[iter] = ℓweights[iter]
@@ -122,16 +125,16 @@ function update!(tempering::JointTempering, adaption::UpdateTrue, ℓweights::Ab
     tempering.weights .-= logsumexp(tempering.weights)
     tempering.weights .= exp.(tempering.weights)
     # Compute new temperature
-    tempering.val.current = update(tempering.weights, tempering.val.current, ESSTarget)
+    tempering.val.current = update(tempering.weights, tempering.val.current, tempering.ESSTarget.current)
     return tempering.val.current
 end
 
 
-function update!(tempering::JointTempering, adaption::UpdateFalse, weights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
+function update!(tempering::JointTempering, adaption::UpdateFalse, weights::AbstractVector)
     return tempering.val.current
 end
-function update!(tempering::JointTempering, weights::AbstractVector, ESSTarget::T) where {T<:AbstractFloat}
-    return update!(tempering, tempering.adaption, weights, ESSTarget)
+function update!(tempering::JointTempering, weights::AbstractVector)
+    return update!(tempering, tempering.adaption, weights)
 end
 
 ############################################################################################
