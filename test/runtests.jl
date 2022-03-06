@@ -14,5 +14,9 @@ include("TestHelper.jl")
 ############################################################################################
 # Run Tests
 @testset "All tests" begin
-    include("test-data.jl")
+    include("test-Algorithm.jl")
+    include("test-Buffer.jl")
+    include("test-Core.jl")
+    include("test-Sampling.jl")
+    include("test-Tempering.jl")
 end
