@@ -2,12 +2,14 @@
 ############################################################################################
 ############################################################################################
 # Chains
-chains_data_init = 200
-chains_threshold = 0.5
-chains_Nchains_init = Int(floor(chains_data_init*chains_coverage))
-chains_coverage = 0.75
 
 @testset "ChainsTune Configuration:" begin
+    #Define Parameter
+    chains_threshold = 0.5
+    chains_coverage = 0.75
+    chains_data_init = 200
+    chains_Nchains_init = Int(floor(chains_data_init*chains_coverage))
+    # Initiate
     chaintune = ChainsTune(chains_coverage, chains_threshold, chains_Nchains_init, chains_data_init)
     chainup_particles, chainup_data = update!(chaintune, chains_data_init + 1)
     #NOTE - Number of particles not updated for 1 additional data point
@@ -162,5 +164,30 @@ end
 ############################################################################################
 ############################################################################################
 # generated
+@testset "Generated functions:" begin
+    # Initiate test cases
+    struct gen_struct
+        a
+        b
+    end
+    generated_struct = gen_struct(1,2)
+    generated_nt = (a = 1., b = [2, 3], c = [4. 5 ; 6 7], d = [[8, 9], [10, 11]])
+    generated_subset = (:a, :b)
+    generated_sym = :c
+    #
+    generated_tmp = BaytesCore.subset(generated_nt, generated_subset)
+    @test length(generated_tmp) == length(generated_subset)
+    generated_tmp2 = BaytesCore.subset(generated_nt, generated_sym)
+    @test length(generated_tmp2) == 1
+    generated_tmp3 = BaytesCore.Tuple_to_Namedtuple(generated_subset, true)
+    @test length(generated_tmp3) == length(generated_subset)
+    generated_tmp4 = BaytesCore.to_NamedTuple_generated(generated_struct)
+    @test generated_tmp4 isa NamedTuple
+end
+
+############################################################################################
+############################################################################################
+############################################################################################
+# helper
 @testset "Generated functions" begin
 end
