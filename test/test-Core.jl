@@ -279,6 +279,23 @@ end
 ############################################################################################
 ############################################################################################
 ############################################################################################
-# jitter
-@testset "Jitter functions:" begin
+# Printing
+@testset "Printing functions:" begin
+end
+
+############################################################################################
+############################################################################################
+############################################################################################
+# Utility
+@testset "Utility functions:" begin
+    utility_arr = [0.0, 1.0, 2.0]
+    utility_xinf = [1., 2., Inf]
+    @test logmeanexp(utility_arr) ≈ log(mean(exp.(utility_arr)))
+    @test logaddexp(utility_xinf[1], utility_xinf[2]) ≈ log(sum(exp.(utility_xinf[1:2])))
+    @test logaddexp(utility_xinf[2], utility_xinf[3]) ≈ log(sum(exp.(utility_xinf[2:3])))
+    #!NOTE: threshold is second argument
+    issmaller(utility_xinf[1], utility_xinf[2])
+    issmaller(utility_xinf[2], utility_xinf[1])
+    issmaller(utility_xinf[2], utility_xinf[3])
+
 end

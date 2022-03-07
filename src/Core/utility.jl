@@ -35,7 +35,8 @@ Check if `x` is larger than `threshold`, guaranteeing same type for arguments.
 ```
 
 """
-function islarger(x::T, threshold::T) where {T<:Real}
+function issmaller(x::T, threshold::T) where {T<:Real}
+    #!TODO: function name ambigous if threshold name not explicitly mentioned
     #!NOTE: "<=" so Resampling at each iteration if threshold == 1.0
     return x <= threshold
 end
@@ -93,5 +94,5 @@ grab(data, idx, config::ArrayConfig) = grab(data, idx, config.sorted)
 export logsumexp, #import from LogExpFunctions
     logaddexp, #import from LogExpFunctions
     logmeanexp,
-    islarger,
+    issmaller,
     grab
