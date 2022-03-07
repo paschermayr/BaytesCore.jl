@@ -23,7 +23,7 @@ end
 ############################################################################################
 ############################################################################################
 # Resample
-import Baytes: ResamplingMethod
+import BaytesCore: ResamplingMethod
 @testset "Sampling - Resample: " begin
     struct Resamplingmethod1 <: ResamplingMethod end
     resample_bool = false
@@ -58,7 +58,7 @@ end
 
     # Basic shuffle! for last dimension
     shuffle_tmp = deepcopy(shuffle_val)
-    shuffle!(shuffle_tmp, shuffle_buffer, shuffle_ancestors)
+    shuffle!(shuffle_tmp, shuffle_anestorbuffer, shuffle_ancestors)
     @test sum( vec(sum(shuffle_tmp, dims=1)) .== sum(shuffle_ancestors) ) == shuffle_ndata
 
     # Shuffle_forward!
