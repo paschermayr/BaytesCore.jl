@@ -40,7 +40,7 @@ function update!(ptune::ChainsTune, Ndata::Integer)
     Nchainsᵖ = Int64(floor(ptune.coverage * Ndata))
     #!NOTE: Update Nchains if coverage falls below data size.
     update_Nchains = ptune.Nchains != Nchainsᵖ ? UpdateTrue() : UpdateFalse()
-    @inbounds if update_Nchains isa UpdateTrue
+    if update_Nchains isa UpdateTrue
         ptune.Nchains = Nchainsᵖ
     end
     return update_Nchains, update_Ndata
