@@ -2,7 +2,6 @@
 ############################################################################################
 ############################################################################################
 # Diagnostics
-
 @testset "Sampling - Diagnostics: " begin
     diag_ℓobjective = Float16(1.0)
     diag_temperature = Float32(0.5)
@@ -15,18 +14,24 @@ end
 ############################################################################################
 ############################################################################################
 # Logging
-
 @testset "Sampling - Logging: " begin
-
+    logging_pr = ProgressReport(;bar=true, log=ConsoleLog())
+    logging_sd = SampleDefault()
 end
 
 ############################################################################################
 ############################################################################################
 ############################################################################################
 # Resample
-
+import Baytes: ResamplingMethod
 @testset "Sampling - Resample: " begin
-
+    struct Resamplingmethod1 <: ResamplingMethod end
+    resample_bool = false
+    resample_tune = ResampleTune(Resamplingmethod1(), Updater(resample_bool))
+    update!(resample_tune)
+    @test resample_tune.update.current != resample_bool
+    init!(resample_tune, resample_bool)
+    @test resample_tune.update.current == resample_bool
 end
 
 ############################################################################################
