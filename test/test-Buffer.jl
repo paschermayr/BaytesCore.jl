@@ -9,7 +9,6 @@ buffer_IType = [Int32, Int64]
 @testset "ParameterBuffer:" begin
     for vtype in buffer_ValType
         for itype in buffer_IType
-            println(vtype, " ", itype)
             param1 = ParameterBuffer(vtype.(1:buffer_nparameter), buffer_nparameter, itype)
             param2 = ParameterBuffer(vtype(1), buffer_nparameter, itype)
             # Check types and size of buffer

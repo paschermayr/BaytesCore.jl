@@ -294,8 +294,46 @@ end
     @test logaddexp(utility_xinf[1], utility_xinf[2]) ≈ log(sum(exp.(utility_xinf[1:2])))
     @test logaddexp(utility_xinf[2], utility_xinf[3]) ≈ log(sum(exp.(utility_xinf[2:3])))
     #!NOTE: threshold is second argument
-    issmaller(utility_xinf[1], utility_xinf[2])
-    issmaller(utility_xinf[2], utility_xinf[1])
-    issmaller(utility_xinf[2], utility_xinf[3])
+    @test issmaller(utility_xinf[1], utility_xinf[2]) == true
+    @test issmaller(utility_xinf[2], utility_xinf[1]) == false
+    @test issmaller(utility_xinf[2], utility_xinf[3]) == true
+end
+
+
+@testset "Utility functions: grab " begin
+
+    grab_iter = 3
+    grab_idx = 1:6
+    grab_idx2 = 1:3
+    grab_ncols = 5
+    grab_nrows = 10
+## Vector
+    grab_data = zeros(grab_nrows)
+    # Sorted by rows
+    grab_sorted = BaytesCore.ByRows()
+    grab_tmp = grab(grab_data, grab_iter, grab_sorted)
+    @test length(grab_tmp) == 1
+    grab_tmp = grab(grab_data, grab_idx, grab_sorted)
+    @test length(grab_tmp) == length(grab_idx)
+    # Sorted by Cols
+    grab_sorted = BaytesCore.ByCols()
+    grab_tmp = grab(grab_data, grab_iter, grab_sorted)
+    @test length(grab_tmp) == 1
+    grab_tmp = grab(grab_data, grab_idx2, grab_sorted)
+    @test length(grab_tmp) == length(grab_idx2)
+## Matrix
+    grab_data = zeros(grab_nrows, grab_ncols)
+    # Sorted by rows
+    grab_sorted = BaytesCore.ByRows()
+    grab_tmp = grab(grab_data, grab_iter, grab_sorted)
+    @test length(grab_tmp) == grab_ncols
+    grab_tmp = grab(grab_data, grab_idx, grab_sorted)
+    @test size(grab_tmp) == (length(grab_idx), grab_ncols)
+    # Sorted by Cols
+    grab_sorted = BaytesCore.ByCols()
+    grab_tmp = grab(grab_data, grab_iter, grab_sorted)
+    @test length(grab_tmp) == grab_nrows
+    grab_tmp = grab(grab_data, grab_idx2, grab_sorted)
+    @test size(grab_tmp) == (grab_nrows, length(grab_idx2))
 
 end
