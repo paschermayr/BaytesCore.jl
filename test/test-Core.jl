@@ -3,7 +3,7 @@
 ############################################################################################
 # Chains
 
-@testset "ChainsTune Configuration:" begin
+@testset "Core - ChainsTune Configuration:" begin
     #Define Parameter
     chains_threshold = 0.5
     chains_coverage = 0.75
@@ -33,7 +33,7 @@ data_config_arbitrary = (data_uv, data_mv)
 
 
 ############################################################################################
-@testset "Array Configuration:" begin
+@testset "Core - Array Configuration:" begin
     ## Univariate Configuration
     @test data_config_uv.sorted isa BaytesCore.ByRows
     @test data_config_uv.size == (1000,)
@@ -46,7 +46,7 @@ data_config_arbitrary = (data_uv, data_mv)
 end
 
 ############################################################################################
-@testset "Data Structures - Univariate Array Configuration" begin
+@testset "Core - Data Structures - Univariate Array Configuration" begin
     ## Assign data structures
     data_batch = BaytesCore.Batch()
     data_subsampled = BaytesCore.SubSampled(N_initial)
@@ -89,7 +89,7 @@ end
 end
 
 ############################################################################################
-@testset "Data Structures - Multivariate RowWise Array Configuration" begin
+@testset "Core - Data Structures - Multivariate RowWise Array Configuration" begin
     ## Assign data structures
     data_batch = BaytesCore.Batch()
     data_subsampled = BaytesCore.SubSampled(N_initial)
@@ -127,7 +127,7 @@ end
 end
 
 ############################################################################################
-@testset "Data Structures - Multivariate ColWise Array Configuration" begin
+@testset "Core - Data Structures - Multivariate ColWise Array Configuration" begin
     ## Assign data structures
     data_batch = BaytesCore.Batch()
     data_subsampled = BaytesCore.SubSampled(N_initial)
@@ -164,7 +164,7 @@ end
 ############################################################################################
 ############################################################################################
 # generated
-@testset "Generated functions:" begin
+@testset "Core - Generated functions:" begin
     # Initiate test cases
     struct gen_struct
         a
@@ -189,7 +189,7 @@ end
 ############################################################################################
 ############################################################################################
 # helper
-@testset "Helper functions:" begin
+@testset "Core - Helper functions:" begin
 
     # Updater
     helper_update = Updater(false)
@@ -229,7 +229,7 @@ end
 ############################################################################################
 ############################################################################################
 # jitter
-@testset "Jitter functions:" begin
+@testset "Core - Jitter functions:" begin
     jitter_adaption = UpdateTrue()
     jitter_threshold = 0.5
     jitter_min = 2
@@ -280,14 +280,14 @@ end
 ############################################################################################
 ############################################################################################
 # Printing
-@testset "Printing functions:" begin
+@testset "Core - Printing functions:" begin
 end
 
 ############################################################################################
 ############################################################################################
 ############################################################################################
 # Utility
-@testset "Utility functions:" begin
+@testset "Core - Utility functions:" begin
     utility_arr = [0.0, 1.0, 2.0]
     utility_xinf = [1., 2., Inf]
     @test logmeanexp(utility_arr) ≈ log(mean(exp.(utility_arr)))
@@ -300,7 +300,7 @@ end
 end
 
 
-@testset "Utility functions: grab " begin
+@testset "Core - Utility functions: grab " begin
 
     grab_iter = 3
     grab_idx = 1:6

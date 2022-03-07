@@ -22,6 +22,8 @@ struct BaseDiagnostics{P}
         prediction::P,
         iter::Integer
     ) where {S<:AbstractFloat, T<:AbstractFloat, P}
+        ArgCheck.@argcheck 0.0 <= temperature <= 1.0
+        ArgCheck.@argcheck 0 <= iter
         return new{P}(ℓobjective, temperature, prediction, iter)
     end
 end

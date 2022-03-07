@@ -6,7 +6,7 @@ buffer_IType = [Int32, Int64]
 
 ############################################################################################
 # ParameterBuffer
-@testset "ParameterBuffer:" begin
+@testset "Buffer - ParameterBuffer: " begin
     for vtype in buffer_ValType
         for itype in buffer_IType
             param1 = ParameterBuffer(vtype.(1:buffer_nparameter), buffer_nparameter, itype)
@@ -55,7 +55,7 @@ function result!(alg::Alg, result)
     alg.res = result
 end
 
-@testset "ModelParameterBuffer:" begin
+@testset "Buffer - ModelParameterBuffer: " begin
     for val in buffer_vals
         for itype in buffer_IType
             param = ModelParameterBuffer(Mod(val), Res(), buffer_nparameter, itype)

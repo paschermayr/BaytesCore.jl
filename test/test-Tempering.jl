@@ -3,7 +3,7 @@
 ############################################################################################
 # Tempering
 
-@testset "Iteration Tempering: " begin
+@testset "Tempering - Iteration Tempering: " begin
     #Define Parameter
     itertemper_type = Float16
     itertemper_adaption = UpdateTrue()
@@ -38,7 +38,7 @@
     @test itertemper_tmp == itertemper_tune.initial.current
 end
 
-@testset "Joint Tempering: " begin
+@testset "Tempering - Joint Tempering: " begin
     # Initial Parameter
     jointtemper_type = Float16
     jointtemper_adaption = UpdateTrue()
