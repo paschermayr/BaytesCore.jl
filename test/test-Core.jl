@@ -229,3 +229,56 @@ end
 ############################################################################################
 ############################################################################################
 # jitter
+@testset "Jitter functions:" begin
+    jitter_adaption = UpdateTrue()
+    jitter_threshold = 0.5
+    jitter_min = 2
+    jitter_max = 10
+
+    ## Adaptive Jittering
+    jitter_tune = JitterTune(
+        jitter_adaption,
+        jitter_threshold,
+        jitter_min,
+        jitter_max
+    )
+    @test jitter_tune.Nsteps.current == 0
+    # Jitter
+    jitter_continue = jitter!(jitter_tune, jitter_threshold + 0.1)
+    @test jitter_tune.Nsteps.current == 1
+    @test jitter_continue == true
+    jitter_continue = jitter!(jitter_tune, jitter_threshold - 0.1)
+    @test jitter_tune.Nsteps.current == 2
+    @test jitter_continue == false
+    #Fall back to 0
+    update!(jitter_tune)
+    @test jitter_tune.Nsteps.current == 0
+
+    ## Fixed number of Jittering steps
+    jitter_tune = JitterTune(
+        UpdateFalse(),
+        jitter_threshold,
+        jitter_min,
+        3
+    )
+    # Jitter
+    jitter_continue = jitter!(jitter_tune, jitter_threshold + 0.1)
+    @test jitter_tune.Nsteps.current == 1
+    @test jitter_continue == true
+    jitter_continue = jitter!(jitter_tune, jitter_threshold - 0.1)
+    @test jitter_tune.Nsteps.current == 2
+    @test jitter_continue == true
+    jitter_continue = jitter!(jitter_tune, jitter_threshold - 0.1)
+    @test jitter_tune.Nsteps.current == 3
+    @test jitter_continue == false
+    #Fall back to 0
+    update!(jitter_tune)
+    @test jitter_tune.Nsteps.current == 0
+end
+
+############################################################################################
+############################################################################################
+############################################################################################
+# jitter
+@testset "Jitter functions:" begin
+end
