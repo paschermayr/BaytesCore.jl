@@ -100,5 +100,12 @@ end
 # Weights
 
 @testset "Sampling - Weights: " begin
-
+    weights_Nweights = 10
+    weights_param = ParameterWeights(weights_Nweights)
+    update!(weights_param)
+    weights_param(log.(1:weights_Nweights))
+    @test logsumexp((weights_param.ℓweightsₙ)) ≈ 0.0
+    weightedincrement(weights_param)
+    @test computeESS(weights_param) ≈ computeESS(exp.(weights_param.ℓweightsₙ))
+    draw!(_RNG, weights_param)
 end
