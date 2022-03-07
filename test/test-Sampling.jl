@@ -88,10 +88,10 @@ end
 ############################################################################################
 ############################################################################################
 # Statistics
-
 @testset "Sampling - Statistics: " begin
-    accept_stat = AcceptStatistic
-
+    accept_rate = 1.0
+    accept_stat = AcceptStatistic(_RNG, log(accept_rate))
+    @test accept_stat.accepted == true
 end
 
 ############################################################################################
