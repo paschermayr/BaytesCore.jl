@@ -189,5 +189,43 @@ end
 ############################################################################################
 ############################################################################################
 # helper
-@testset "Generated functions" begin
+@testset "Helper functions:" begin
+
+    # Updater
+    helper_update = Updater(false)
+    update!(helper_update)
+    @test helper_update.current == true
+    init!(helper_update, false)
+    @test helper_update.current == false
+
+    # ValueHolder
+    helper_valholder = ValueHolder(1.0)
+    @test helper_valholder.current == 1.0
+    update!(helper_valholder, 2.0)
+    @test helper_valholder.current == 2.0
+    init!(helper_valholder, 3.0)
+    @test helper_valholder.current == 3.0
+
+    # Iterator
+    helper_iterator = Iterator(3)
+    @test helper_iterator.current == 3
+    update!(helper_iterator)
+    @test helper_iterator.current == 4
+    init!(helper_iterator, 6)
+    @test helper_iterator.current == 6
+
+    # Accumulator
+    helper_accumulator = Accumulator()
+    update!(helper_accumulator, 1.0)
+    @test helper_accumulator.current == helper_accumulator.cumulative == 1.0
+    update!(helper_accumulator, 1.5)
+    @test helper_accumulator.current == 1.5
+    @test helper_accumulator.cumulative == 2.5
+    init!(helper_accumulator)
+    @test helper_accumulator.current == helper_accumulator.cumulative == 0.0
 end
+
+############################################################################################
+############################################################################################
+############################################################################################
+# jitter
