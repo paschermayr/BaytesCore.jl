@@ -183,6 +183,11 @@ end
     @test length(generated_tmp3) == length(generated_subset)
     generated_tmp4 = BaytesCore.to_NamedTuple_generated(generated_struct)
     @test generated_tmp4 isa NamedTuple
+    #
+    generated_tup1 = BaytesCore.to_Tuple(generated_subset)
+    generated_tup2 = BaytesCore.to_Tuple(generated_sym)
+    @test generated_tup1 isa Tuple
+    @test generated_tup2 isa Tuple
 end
 
 ############################################################################################

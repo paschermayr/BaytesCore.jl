@@ -155,4 +155,21 @@ Generate union of fields from 2 NamedTuples x and y.
 end
 
 ############################################################################################
+"""
+$(SIGNATURES)
+Return symbol input as tuple.
+
+# Examples
+```julia
+```
+
+"""
+function to_Tuple(sym::Symbol)
+    return (sym, )
+end
+function to_Tuple(sym::Tuple)
+    return sym
+end
+
+############################################################################################
 # Export
