@@ -15,6 +15,7 @@ function shuffle!(
     ## Assign temporary variables
     Nparticles = size(ancestor, 1)
     Ndata = size(val, 2)
+    ArgCheck.@argcheck Nparticles == size(val, 1) == length(buffer)
     ## Reshuffle val - can be done inplace via buffer
     @inbounds for t in Ndata:-1:1
         for idx in Base.OneTo(Nparticles)
@@ -47,8 +48,12 @@ function shuffle_forward!(
     lookback::Integer,
     iterₘₐₓ::Integer,
 ) where {P,I<:Integer}
-    ## Assign temporary variables
+    ## Assign temporary variables and check for sizes
     Nparticles = size(buffer_val, 1)
+    ArgCheck.@argcheck Nparticles == size(val, 1) == size(ancestor, 1)
+    ArgCheck.@argcheck 0 < iterₘₐₓ <= size(val, 2) && size(val, 2) == size(ancestor, 2)
+    ArgCheck.@argcheck lookback >= 0
+
     ## 1 Resample current particles
     @inbounds for idx in Base.OneTo(Nparticles)
         #!NOTE: buffer_ancestor assigned for higher order memory case below
@@ -63,7 +68,8 @@ function shuffle_forward!(
     if lookback > 1
         ## Assign last possible time point for lookback,
         #!NOTE: i.e. lookback == 2 means current particles AND particles at iterₘₐₓ-1 are resampled.
-        iter₀ = iterₘₐₓ - lookback + 1
+        #!NOTE: Minimum iter₀ is at index 1
+        iter₀ = max(1, iterₘₐₓ - lookback + 1)
         @inbounds for t in (iterₘₐₓ - 1):-1:iter₀
             ## Assign buffer for resampled particle from ancestor at iterₘₐₓ
             for idx in Base.OneTo(Nparticles)

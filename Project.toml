@@ -1,7 +1,7 @@
 name = "BaytesCore"
 uuid = "e5a8efeb-54cd-4583-bf9c-87b09970f7ba"
 authors = ["Patrick Aschermayr <p.aschermayr@gmail.com>"]
-version = "0.1.28"
+version = "0.1.29"
 
 [deps]
 ArgCheck = "dce04be8-c92d-5529-be00-80e4d2c0e197"
