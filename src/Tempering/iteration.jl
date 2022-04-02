@@ -67,7 +67,7 @@ Helper function to determine temperature shape given param variables.
 
 """
 function checktemperature(param::TemperingParameter, iterations::Integer)
-    return map(iter -> udpate(param, iter), Base.OneTo(iterations))
+    return map(iter -> update(param, iter), Base.OneTo(iterations))
 end
 
 ############################################################################################

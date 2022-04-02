@@ -47,7 +47,7 @@ struct Res <: AbstractResult end
 mutable struct Alg{R} <: AbstractAlgorithm
     res::R
 end
-import BaytesCore: get_result, result!
+
 function get_result(alg::Alg)
     return alg.res
 end

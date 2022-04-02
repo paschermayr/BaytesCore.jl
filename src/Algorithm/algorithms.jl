@@ -59,19 +59,6 @@ get_result(algorithm::AbstractAlgorithm)
 """
 function get_result end
 
-#=
-"""
-    $(FUNCTIONNAME)
-Get log objective result of algorithm.
-
-# Examples
-```julia
-get_ℓweight(algorithm::AbstractAlgorithm)
-```
-
-"""
-function get_ℓweight end
-=#
 """
     $(FUNCTIONNAME)
 Get tagged parameter of AbstractAlgorithm..

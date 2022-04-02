@@ -23,7 +23,6 @@ end
 ############################################################################################
 ############################################################################################
 # Resample
-import BaytesCore: ResamplingMethod
 @testset "Sampling - Resample: " begin
     struct Resamplingmethod1 <: ResamplingMethod end
     resample_bool = false
@@ -32,6 +31,7 @@ import BaytesCore: ResamplingMethod
     @test resample_tune.update.current != resample_bool
     init!(resample_tune, resample_bool)
     @test resample_tune.update.current == resample_bool
+
 end
 
 ############################################################################################

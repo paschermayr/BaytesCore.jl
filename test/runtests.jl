@@ -8,6 +8,11 @@ using Statistics
 # Import Baytes Packages
 using BaytesCore
 
+import BaytesCore:
+    get_result,
+    result!,
+    ResamplingMethod
+
 ############################################################################################
 # Include Files
 include("TestHelper.jl")

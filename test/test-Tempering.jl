@@ -16,6 +16,8 @@
         itertemper_val,
         itertemper_iter
     )
+    temps = BaytesCore.checktemperature(itertemper_tune.parameter, itertemper_iter)
+    @test all( temps[iter] >= temps[iter-1] for iter in 2:itertemper_iter)
     @test itertemper_tune.initial.current isa itertemper_type
     @test itertemper_tune.parameter.L isa itertemper_type
     # Update temperature
@@ -60,6 +62,7 @@ end
         jointtemper_ESS,
         length(jointtemper_weights)
     )
+    initial(jointtemper_tune)
     @test typeof(jointtemper_tune.val.current) == typeof(jointtemper_tune.ESSTarget.current) == jointtemper_type
     @test eltype(jointtemper_tune.weights) == jointtemper_type
     # Check for Updates
