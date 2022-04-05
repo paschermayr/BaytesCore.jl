@@ -13,6 +13,7 @@ function logmeanexp(arr::Vector{T}) where {T<:Real}
     return log(1 / size(arr, 1)) + LogExpFunctions.logsumexp(arr)
 end
 
+#=
 #= DISCLAIMER & CREDIT TO:
     StatsFuns.jl/DynamicHMC.jl for cornercase of infinite x/y
 =#
@@ -24,7 +25,7 @@ function logaddexp(x, y)
         y + LogExpFunctions.log1p(exp(x - y))
     end
 end
-
+=#
 ############################################################################################
 """
 $(SIGNATURES)
@@ -93,6 +94,6 @@ grab(data, idx, config::ArrayConfig) = grab(data, idx, config.sorted)
 # Export
 export logsumexp, #import from LogExpFunctions
     logaddexp, #import from LogExpFunctions
-    logmeanexp,
+    logmeanexp, #import from LogExpFunctions
     issmaller,
     grab
