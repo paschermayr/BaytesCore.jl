@@ -309,10 +309,10 @@ end
     utility_arr = [0.0, 1.0, 2.0]
     utility_xinf = [1., 2., Inf]
     @test logmeanexp(utility_arr) ≈ log(mean(exp.(utility_arr)))
-    @test logaddexp(utility_xinf[1], utility_xinf[2]) ≈ log(sum(exp.(utility_xinf[1:2])))
-    @test logaddexp(utility_xinf[2], utility_xinf[3]) ≈ log(sum(exp.(utility_xinf[2:3])))
-    @test logaddexp(utility_xinf[2], utility_xinf[1]) ≈ log(sum(exp.(utility_xinf[1:2])))
-    @test logaddexp(utility_xinf[3], utility_xinf[2]) ≈ log(sum(exp.(utility_xinf[2:3])))
+    @test BaytesCore.logaddexp(utility_xinf[1], utility_xinf[2]) ≈ log(sum(exp.(utility_xinf[1:2])))
+    @test BaytesCore.logaddexp(utility_xinf[2], utility_xinf[3]) ≈ log(sum(exp.(utility_xinf[2:3])))
+    @test BaytesCore.logaddexp(utility_xinf[2], utility_xinf[1]) ≈ log(sum(exp.(utility_xinf[1:2])))
+    @test BaytesCore.logaddexp(utility_xinf[3], utility_xinf[2]) ≈ log(sum(exp.(utility_xinf[2:3])))
 
     #!NOTE: threshold is second argument
     @test issmaller(utility_xinf[1], utility_xinf[2]) == true
