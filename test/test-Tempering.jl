@@ -54,6 +54,7 @@ end
     @test jointtemper_essdiff(jointtemper_λ₀ + 0.01) >= 0.0
     jointtemper_newval = update(jointtemper_weights, jointtemper_λ₀, jointtemper_ESS)
     @test jointtemper_newval >= jointtemper_λ₀
+    @test update(jointtemper_weights, 1.0, jointtemper_ESS) ≈ 1.0 atol = _TOL
     ## Adaptive joint tempering
     jointtemper_tune = JointTempering(
         jointtemper_type,

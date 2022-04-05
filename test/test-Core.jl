@@ -172,8 +172,21 @@ end
     end
     generated_struct = gen_struct(1,2)
     generated_nt = (a = 1., b = [2, 3], c = [4. 5 ; 6 7], d = [[8, 9], [10, 11]])
+    generated_vec = [1., [2, 3], [4. 5 ; 6 7], [[8, 9], [10, 11]]]
     generated_subset = (:a, :b)
     generated_sym = :c
+    #
+    _ntup = BaytesCore.to_NamedTuple(keys(generated_nt), generated_vec)
+    @test _ntup isa NamedTuple
+    _tup = BaytesCore.to_Tuple_generated(generated_struct)
+    @test _tup isa Tuple
+    #
+    sym = BaytesCore.Tuple_to_Namedtuple(generated_subset, true)
+    @test sym isa NamedTuple
+    _ntup2 = BaytesCore.subset(_ntup, sym)
+    @test _ntup2 isa NamedTuple
+    @test keys(_ntup2) == keys(sym) == generated_subset
+    BaytesCore.keyunion(generated_nt, _ntup2)
     #
     generated_tmp = BaytesCore.subset(generated_nt, generated_subset)
     @test length(generated_tmp) == length(generated_subset)
@@ -298,6 +311,9 @@ end
     @test logmeanexp(utility_arr) ≈ log(mean(exp.(utility_arr)))
     @test logaddexp(utility_xinf[1], utility_xinf[2]) ≈ log(sum(exp.(utility_xinf[1:2])))
     @test logaddexp(utility_xinf[2], utility_xinf[3]) ≈ log(sum(exp.(utility_xinf[2:3])))
+    @test logaddexp(utility_xinf[2], utility_xinf[1]) ≈ log(sum(exp.(utility_xinf[1:2])))
+    @test logaddexp(utility_xinf[3], utility_xinf[2]) ≈ log(sum(exp.(utility_xinf[2:3])))
+
     #!NOTE: threshold is second argument
     @test issmaller(utility_xinf[1], utility_xinf[2]) == true
     @test issmaller(utility_xinf[2], utility_xinf[1]) == false
@@ -313,6 +329,7 @@ end
     grab_ncols = 5
     grab_nrows = 10
 ## Vector
+    @test grab(nothing, nothing, nothing) isa Nothing
     grab_data = zeros(grab_nrows)
     # Sorted by rows
     grab_sorted = BaytesCore.ByRows()

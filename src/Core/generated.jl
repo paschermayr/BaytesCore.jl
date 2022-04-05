@@ -89,6 +89,7 @@ end
 
 ############################################################################################
 #=
+#=
 """
 $(SIGNATURES)
 Subset NamedTuple x given symbols sym without additional allocations.
@@ -108,6 +109,7 @@ Subset NamedTuple x given symbols sym without additional allocations.
     return :($tup)
 end
 getval(::Type{Val{T}}) where {T} = T
+=#
 
 ############################################################################################
 #=
