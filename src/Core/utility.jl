@@ -13,19 +13,6 @@ function logmeanexp(arr::Vector{T}) where {T<:Real}
     return log(1 / size(arr, 1)) + LogExpFunctions.logsumexp(arr)
 end
 
-#=
-#= DISCLAIMER & CREDIT TO:
-    StatsFuns.jl/DynamicHMC.jl for cornercase of infinite x/y
-=#
-function logaddexp(x, y)
-    isfinite(x) && isfinite(y) || return max(x, y)
-    return if x > y
-        x + LogExpFunctions.log1p(exp(y - x))
-    else
-        y + LogExpFunctions.log1p(exp(x - y))
-    end
-end
-=#
 ############################################################################################
 """
 $(SIGNATURES)
