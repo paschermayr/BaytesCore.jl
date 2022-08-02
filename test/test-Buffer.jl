@@ -1,4 +1,5 @@
 ############################################################################################
+buffer_nchains=10
 buffer_nparameter = 100
 buffer_newparam = 10
 buffer_ValType = [Float32, Float64]
@@ -59,26 +60,30 @@ end
     for val in buffer_vals
         for itype in buffer_IType
 #            param = ModelParameterBuffer(Mod(val), Res(), buffer_nparameter, itype)
-            param = ModelParameterBuffer(Mod(val), buffer_nparameter, itype)
+            param = ModelParameterBuffer(Mod(val), buffer_nchains, buffer_nparameter, Float64, itype)
             # Check types and size of buffer
             @test eltype(param.val) == typeof(val)
+            @test eltype(param.valᵤ[begin]) == Float64
             @test length(param.val) == length(param.index) ==
-                length(param.weight ) == buffer_nparameter # == length(param.result)
+                length(param.weight )   == length(param.valᵤ)
+            @test length(param.valᵤ[begin]) == buffer_nparameter
             # Resize and check again
             buffer_nparameter_new = buffer_nparameter + buffer_newparam
             _param = deepcopy(param)
             resize!(_param, buffer_nparameter_new)
             @test length(_param.val) == length(_param.index) ==
-                length(_param.weight ) == buffer_nparameter_new # == length(_param.result)
-            @test length(param.val) + buffer_newparam == length(_param.index)
+                length(_param.weight ) == buffer_nparameter_new  == length(_param.valᵤ)
+#            @test length(param.val) + buffer_newparam == length(_param.index)
+            @test length(param.valᵤ[begin]) == buffer_nparameter
             # Shuffle and check if correct
+#=
             __param = deepcopy(param)
             mods = [Mod(val) for _ in 1:buffer_nparameter]
             weights = collect(1.0:1:buffer_nparameter)
-#            algs = [Alg(Res()) for _ in 1:buffer_nparameter]
-#            shuffle!(__param, algs, mods, weights)
-            shuffle!(__param, mods, weights)
+            algs = [Alg(Res()) for _ in 1:buffer_nparameter]
+            shuffle!(__param, algs, mods, weights)
             @test __param.weight[end] == buffer_nparameter
+=#
         end
     end
 end

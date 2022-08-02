@@ -66,58 +66,73 @@ Stores a vector of a all model parameter `val` and several useful location stati
 ```
 
 """
-struct ModelParameterBuffer{M<:NamedTuple, I<:Integer, T<:AbstractFloat}
-    "Model parameter."
+struct ModelParameterBuffer{M<:NamedTuple, S<:Real, T<:AbstractFloat, I<:Integer}
+    "Model parameter in constrained space as NamedTuple."
     val::Vector{M}
-    "Indices for model parameter in the chain."
-    index::Vector{I}
+    "Model parameter in unconstrained space as Vector."
+    valᵤ::Vector{Vector{S}}
     "Stores Weight of val used for resampling `val`."
     weight::Vector{T}
+    "Indices for model parameter in the chain."
+    index::Vector{I}
     function ModelParameterBuffer(
         val::Vector{M},
+        valᵤ::Vector{Vector{S}},
+        weight::Vector{T},
         index::Vector{I},
-        weight::Vector{T}
-        ) where {M<:NamedTuple, I<:Integer, T<:AbstractFloat}
-        return new{M, I, T}(val, index, weight)
+        ) where {M<:NamedTuple, S<:Real, T<:AbstractFloat, I<:Integer}
+        return new{M, S, T, I}(val, valᵤ, weight, index)
     end
 end
 
 function ModelParameterBuffer(
     model::M,
+    Nchains::Integer,
     Nparameter::Integer,
-    F::Type{I}
-    ) where {M<:AbstractModelWrapper, I<:Integer}
-    val = Vector{typeof(model.val)}(undef, Nparameter)
-    index = F.(1:Nparameter)
-    weight = zeros(Nparameter)
-    return ModelParameterBuffer(val, index, weight)
+    ValType::Type{S},
+    IndexType::Type{I}
+    ) where {M<:AbstractModelWrapper, S<:Real ,I<:Integer}
+    val = Vector{typeof(model.val)}(undef, Nchains)
+    valᵤ = map(iter -> Vector{ValType}(undef, Nparameter), Base.OneTo(Nchains))
+    weight = zeros(Nchains)
+    index = IndexType.(1:Nchains)
+    return ModelParameterBuffer(val, valᵤ, weight, index)
 end
 
-function resize!(buffer::ModelParameterBuffer, Nparameter::Integer)
-    resize!(buffer.val, Nparameter)
-    resize!(buffer.index, Nparameter)
-    resize!(buffer.weight, Nparameter)
+function resize!(buffer::ModelParameterBuffer, Nchains::Integer)
+    resize!(buffer.val, Nchains)
+    resize!(buffer.valᵤ, Nchains)
+    resize!(buffer.weight, Nchains)
+    resize!(buffer.index, Nchains)
     return nothing
 end
 
 function shuffle!(
     buffer::ModelParameterBuffer,
     model::AbstractVector{M},
+    algorithm::AbstractVector{A},
     weights::AbstractVector{T}
-    ) where {M<:AbstractModelWrapper, T<:Real}
+    ) where {A<:AbstractAlgorithm, M<:AbstractModelWrapper, T<:Real}
     ## Shuffle Model parameter, log objective results and weights
     @inbounds for idx in Base.OneTo(length(buffer.val))
-        #!NOTE: This one has pointer issues
+        #!NOTE: This one has pointer issues:
         # buffer.val[idx] = model[buffer.index[idx]].val
         #!NOTE: This does NOT work with NamedTuples of NamedTuples, but much faster than deepcopy
         buffer.val[idx] = map(copy, model[buffer.index[idx]].val)
         buffer.weight[idx] = weights[buffer.index[idx]]
+        #!NOTE Initial parameter stored to compute correlation against jittered parameter in unconstrained space
+        result = BaytesCore.get_result(algorithm[buffer.index[idx]])
+        for iter in eachindex(result.θᵤ)
+            buffer.valᵤ[idx][iter] = result.θᵤ[iter]
+        end
     end
     ## Return back to appropriate place
     #!NOTE: Cannot be performed in same loop as before
     @inbounds for idx in Base.OneTo(length(buffer.val))
         model[idx].val = buffer.val[idx]
         weights[idx] = buffer.weight[idx]
+        #!NOTE: There is not need to swap out results from algorithm vector, as UpdateTrue() will be used for first jitter step
+        #!NOTE: buffer.valᵤ only used to compute correlation of jittered vs initial parameter
     end
     return nothing
 end
