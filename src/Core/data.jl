@@ -119,6 +119,11 @@ function DataTune(data::AbstractArray{T}, structure::D, miss=nothing
     return DataTune(structure, ArrayConfig(data), miss)
 end
 
+function DataTune(structure::Batch)
+    return DataTune(Batch(), nothing, nothing)
+end
+
+
 ############################################################################################
 """
 $(SIGNATURES)

@@ -63,6 +63,8 @@ end
     BaytesCore.DataTune(data_uv, data_subsampled)
     BaytesCore.DataTune(data_uv, data_expanding)
     BaytesCore.DataTune(data_uv, data_rolling)
+    BaytesCore.DataTune(Batch())
+
     ## Check Data dimension
     @test size(BaytesCore.adjust(tune_batch, data_uv), 1) == size(data_uv, 1)
     @test size(BaytesCore.adjust(tune_subsampled, data_uv), 1) == N_initial
