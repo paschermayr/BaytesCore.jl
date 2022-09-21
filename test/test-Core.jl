@@ -69,6 +69,12 @@ end
     @test size(BaytesCore.adjust(tune_expanding, data_uv), 1) == N_initial
     @test size(BaytesCore.adjust(tune_rolling, data_uv), 1) == N_initial
     @test size(BaytesCore.adjust(tune_batch_arbitrarydata, data_config_arbitrary), 1) == size(data_config_arbitrary, 1)
+
+    @test size(BaytesCore.adjust_previous(tune_batch, data_uv), 1) == size(data_uv, 1)
+    @test size(BaytesCore.adjust_previous(tune_subsampled, data_uv), 1) == N_initial
+    @test size(BaytesCore.adjust_previous(tune_expanding, data_uv), 1) == N_initial-1
+    @test size(BaytesCore.adjust_previous(tune_rolling, data_uv), 1) == N_initial-1
+
     ## Update data
     N_new = N_initial + 1
     BaytesCore.update!(_RNG, tune_batch)
@@ -86,6 +92,15 @@ end
     #!NOTE: Expanding Data Structure changes in size
     @test size(BaytesCore.adjust(tune_expanding, data_uv), 1) == N_new
     @test size(BaytesCore.adjust(tune_rolling, data_uv), 1) == N_initial
+
+    @test size(BaytesCore.adjust_previous(tune_expanding, data_uv), 1) == N_new-1
+    @test size(BaytesCore.adjust_previous(tune_rolling, data_uv), 1) == N_initial
+
+    BaytesCore.update!(_RNG, tune_expanding)
+    BaytesCore.update!(_RNG, tune_rolling)
+    N_new2 = N_new + 1
+    @test size(BaytesCore.adjust_previous(tune_expanding, data_uv), 1) == N_new2-1
+    @test size(BaytesCore.adjust_previous(tune_rolling, data_uv), 1) == N_initial
 end
 
 ############################################################################################
@@ -109,6 +124,12 @@ end
     @test size(BaytesCore.adjust(tune_subsampled, data_mv), 1) == N_initial
     @test size(BaytesCore.adjust(tune_expanding, data_mv), 1) == N_initial
     @test size(BaytesCore.adjust(tune_rolling, data_mv), 1) == N_initial
+
+    @test size(BaytesCore.adjust_previous(tune_batch, data_mv)) == size(data_mv)
+    @test size(BaytesCore.adjust_previous(tune_subsampled, data_mv), 1) == N_initial
+    @test size(BaytesCore.adjust_previous(tune_expanding, data_mv), 1) == N_initial-1
+    @test size(BaytesCore.adjust_previous(tune_rolling, data_mv), 1) == N_initial-1
+
     ## Update data
     N_new = N_initial + 1
     BaytesCore.update!(_RNG, tune_batch)
@@ -124,6 +145,15 @@ end
     #!NOTE: Expanding Data Structure changes in size
     @test size(BaytesCore.adjust(tune_expanding, data_mv), 1) == N_new
     @test size(BaytesCore.adjust(tune_rolling, data_mv), 1) == N_initial
+
+    @test size(BaytesCore.adjust_previous(tune_expanding, data_mv), 1) == N_new-1
+    @test size(BaytesCore.adjust_previous(tune_rolling, data_mv), 1) == N_initial
+
+    BaytesCore.update!(_RNG, tune_expanding)
+    BaytesCore.update!(_RNG, tune_rolling)
+    N_new2 = N_new + 1
+    @test size(BaytesCore.adjust_previous(tune_expanding, data_mv), 1) == N_new2-1
+    @test size(BaytesCore.adjust_previous(tune_rolling, data_mv), 1) == N_initial
 end
 
 ############################################################################################
@@ -143,6 +173,12 @@ end
     @test size(BaytesCore.adjust(tune_subsampled, data_mv2), 2) == N_initial
     @test size(BaytesCore.adjust(tune_expanding, data_mv2), 2) == N_initial
     @test size(BaytesCore.adjust(tune_rolling, data_mv2), 2) == N_initial
+
+    @test size(BaytesCore.adjust_previous(tune_batch, data_mv2)) == size(data_mv2)
+    @test size(BaytesCore.adjust_previous(tune_subsampled, data_mv2), 2) == N_initial
+    @test size(BaytesCore.adjust_previous(tune_expanding, data_mv2), 2) == N_initial-1
+    @test size(BaytesCore.adjust_previous(tune_rolling, data_mv2), 2) == N_initial-1
+
     ## Update data
     N_new = N_initial + 1
     BaytesCore.update!(_RNG, tune_batch)
@@ -158,6 +194,16 @@ end
     #!NOTE: Expanding Data Structure changes in size
     @test size(BaytesCore.adjust(tune_expanding, data_mv2), 2) == N_new
     @test size(BaytesCore.adjust(tune_rolling, data_mv2), 2) == N_initial
+
+    @test size(BaytesCore.adjust_previous(tune_expanding, data_mv2), 2) == N_new-1
+    @test size(BaytesCore.adjust_previous(tune_rolling, data_mv2), 2) == N_initial
+
+    BaytesCore.update!(_RNG, tune_expanding)
+    BaytesCore.update!(_RNG, tune_rolling)
+    N_new2 = N_new + 1
+    @test size(BaytesCore.adjust_previous(tune_expanding, data_mv2), 2) == N_new2-1
+    @test size(BaytesCore.adjust_previous(tune_rolling, data_mv2), 2) == N_initial
+
 end
 
 ############################################################################################
@@ -299,6 +345,20 @@ end
 ############################################################################################
 # Printing
 @testset "Core - Printing functions:" begin
+end
+
+############################################################################################
+############################################################################################
+############################################################################################
+# Proposal
+@testset "Core - ProposalTune functions:" begin
+
+    @test ProposalTune(1.0) isa ProposalTune
+    @test ProposalTune(0.0) isa ProposalTune
+
+    @test_throws ArgumentError("temperature <= 1.0 must hold. Got\ntemperature => 2.0") ProposalTune(2.0)
+    @test_throws ArgumentError("0.0 <= temperature must hold. Got\ntemperature => -2.0") ProposalTune(-2.0)
+
 end
 
 ############################################################################################

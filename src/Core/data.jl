@@ -163,6 +163,10 @@ Adjust data with current datatune configuration.
 function adjust(tune::DataTune{<:Batch}, data)
     return data
 end
+function adjust(tune::DataTune{<:SubSampled}, data)
+    return grab(data, tune.structure.buffer, tune.config)
+end
+
 function adjust(tune::DataTune{<:Expanding}, data)
     return grab(data, 1:(tune.structure.index.current), tune.config)
 end
@@ -173,8 +177,34 @@ function adjust(tune::DataTune{<:Rolling}, data)
         tune.config,
     )
 end
-function adjust(tune::DataTune{<:SubSampled}, data)
-    return grab(data, tune.structure.buffer, tune.config)
+
+############################################################################################
+"""
+$(SIGNATURES)
+Adjust data with datatune configuration from previous iteration.
+
+# Examples
+```julia
+```
+
+"""
+function adjust_previous(tune::DataTune{<:Batch}, data)
+    return adjust(tune, data)
+end
+function adjust_previous(tune::DataTune{<:SubSampled}, data)
+    return adjust(tune, data)
+end
+
+function adjust_previous(tune::DataTune{<:Expanding}, data)
+    return grab(data, 1:(tune.structure.index.current - 1), tune.config)
+end
+function adjust_previous(tune::DataTune{<:Rolling}, data)
+    dat_start = max(1, (tune.structure.index.current - tune.structure.length))
+    return grab(
+        data,
+        dat_start:(tune.structure.index.current - 1),
+        tune.config,
+    )
 end
 
 ############################################################################################
