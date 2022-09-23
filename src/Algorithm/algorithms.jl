@@ -126,6 +126,18 @@ function generate_showvalues end
 
 """
     $(FUNCTIONNAME)
+Generate output for model and algorithm after proposal step.
+
+# Examples
+```julia
+```
+
+"""
+function generate end
+
+
+"""
+    $(FUNCTIONNAME)
 Infer output type from input. Infer `AbstractDiagnostics` from corresponding `AbstractAlgorithm`
 
 # Examples
