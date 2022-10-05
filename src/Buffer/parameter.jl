@@ -107,6 +107,21 @@ function resize!(buffer::ModelParameterBuffer, Nchains::Integer)
     return nothing
 end
 
+"""
+$(SIGNATURES)
+Copy value, if no NamedTuple, use faster copy version instead of NamedTuple.
+# Examples
+```julia
+```
+
+"""
+function _copy(val)
+    return copy(val)
+end
+function _copy(val::NamedTuple)
+    return deepcopy(val)
+end
+
 function shuffle!(
     buffer::ModelParameterBuffer,
     model::AbstractVector{M},
@@ -117,8 +132,8 @@ function shuffle!(
     @inbounds for idx in Base.OneTo(length(buffer.val))
         #!NOTE: This one has pointer issues:
         # buffer.val[idx] = model[buffer.index[idx]].val
-        #!NOTE: This does NOT work with NamedTuples of NamedTuples, but much faster than deepcopy
-        buffer.val[idx] = map(copy, model[buffer.index[idx]].val)
+        #!NOTE: copy does NOT work with NamedTuples of NamedTuples, but much faster than deepcopy
+        buffer.val[idx] = map(_copy, model[buffer.index[idx]].val)
         buffer.weight[idx] = weights[buffer.index[idx]]
         #!NOTE Initial parameter stored to compute correlation against jittered parameter in unconstrained space
         result = BaytesCore.get_result(algorithm[buffer.index[idx]])
@@ -136,69 +151,6 @@ function shuffle!(
     end
     return nothing
 end
-
-#=
-struct ModelParameterBuffer{M<:NamedTuple, I<:Integer, L, T<:AbstractFloat}
-    "Model parameter."
-    val::Vector{M}
-    "Indices for model parameter in the chain."
-    index::Vector{I}
-    "LogDensity results."
-    result::Vector{L}
-    "Stores Weight of val used for resampling `val`."
-    weight::Vector{T}
-    function ModelParameterBuffer(
-        val::Vector{M},
-        index::Vector{I},
-        result::Vector{L},
-        weight::Vector{T}
-        ) where {M<:NamedTuple, I<:Integer, L, T<:AbstractFloat}
-        return new{M, I, L, T}(val, index, result, weight)
-    end
-end
-function ModelParameterBuffer(
-    model::M,
-    result::R,
-    Nparameter::Integer,
-    F::Type{I}
-    ) where {M<:AbstractModelWrapper, R<:AbstractResult, I<:Integer}
-    val = Vector{typeof(model.val)}(undef, Nparameter)
-    result = Vector{typeof(result)}(undef, Nparameter)
-    index = F.(1:Nparameter)
-    weight = zeros(Nparameter)
-    return ModelParameterBuffer(val, index, result, weight)
-end
-
-function resize!(buffer::ModelParameterBuffer, Nparameter::Integer)
-    resize!(buffer.val, Nparameter)
-    resize!(buffer.index, Nparameter)
-    resize!(buffer.result, Nparameter)
-    resize!(buffer.weight, Nparameter)
-    return nothing
-end
-
-function shuffle!(
-    buffer::ModelParameterBuffer,
-    algorithm::AbstractVector{A},
-    model::AbstractVector{M},
-    weights::AbstractVector{T}
-    ) where {A<:AbstractAlgorithm, M<:AbstractModelWrapper, T<:Real}
-    ## Shuffle Model parameter, log objective results and weights
-    @inbounds for idx in Base.OneTo(length(buffer.val))
-        buffer.val[idx] = model[buffer.index[idx]].val
-        buffer.result[idx] = get_result(algorithm[buffer.index[idx]])
-        buffer.weight[idx] = weights[buffer.index[idx]]
-    end
-    ## Return back to appropriate place
-    #!NOTE: Cannot be performed in same loop as before
-    @inbounds for idx in Base.OneTo(length(buffer.val))
-        model[idx].val = buffer.val[idx]
-        result!(algorithm[idx], buffer.result[idx])
-        weights[idx] = buffer.weight[idx]
-    end
-    return nothing
-end
-=#
 
 ############################################################################################
 # Export
