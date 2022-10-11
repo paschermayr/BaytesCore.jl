@@ -23,12 +23,23 @@ Check if `x` is larger than `threshold`, guaranteeing same type for arguments.
 ```
 
 """
-function issmaller(x::T, threshold::T) where {T<:Real}
+function issmaller(x::S, threshold::T) where {S<:Real, T<:Real}
     #!NOTE: "<=" so Resampling at each iteration if threshold == 1.0
-    #!NOTE: Add isfinite() in case of NaN or Inf cases
-    return isfinite(x) && x <= threshold
+    return x <= threshold
 end
+"""
+$(SIGNATURES)
+Add isfinite() check in case of NaN or Inf cases to 'issmaller'.
 
+# Examples
+```julia
+```
+
+"""
+function isresampled(x::S, threshold::T) where {S<:Real, T<:Real}
+    #!NOTE: Add isfinite() in case of NaN or Inf cases
+    return !isfinite(x) || issmaller(x, threshold)
+end
 ############################################################################################
 """
 $(SIGNATURES)
@@ -83,4 +94,5 @@ export logsumexp, #import from LogExpFunctions
     logaddexp, #import from LogExpFunctions
     logmeanexp, #import from LogExpFunctions
     issmaller,
+    isresampled,
     grab
