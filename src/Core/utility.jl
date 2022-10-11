@@ -24,9 +24,9 @@ Check if `x` is larger than `threshold`, guaranteeing same type for arguments.
 
 """
 function issmaller(x::T, threshold::T) where {T<:Real}
-    #!TODO: function name ambigous if threshold name not explicitly mentioned
     #!NOTE: "<=" so Resampling at each iteration if threshold == 1.0
-    return x <= threshold
+    #!NOTE: Add isfinite() in case of NaN or Inf cases
+    return isfinite(x) && x <= threshold
 end
 
 ############################################################################################
