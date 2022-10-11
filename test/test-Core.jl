@@ -380,6 +380,12 @@ end
     @test issmaller(utility_xinf[1], utility_xinf[2]) == true
     @test issmaller(utility_xinf[2], utility_xinf[1]) == false
     @test issmaller(utility_xinf[2], utility_xinf[3]) == true
+
+    @test issmaller(1., 2.) == true
+    @test issmaller(2., 1.) == false
+    @test issmaller(Inf, 1.) == false
+    @test issmaller(NaN, 1.) == false
+
 end
 
 
