@@ -13,7 +13,6 @@
 
 Core structures that are shared for various Baytes modules.
 
-
 <!---
 See also:
 [ModelWrappers.jl](xxx)
