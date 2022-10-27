@@ -3,7 +3,7 @@
 $(TYPEDEF)
 Proposal function tuning struct.
 
-Contains information for proposal step of algorithm that is on a higher level, like data indexing, and is not stored in algorithm struct.
+Contains information for proposal step of algorithm that is on a higher level and shared among different sampler, like data indexing, and is not stored in algorithm struct.
 
 # Fields
 $(TYPEDFIELDS)

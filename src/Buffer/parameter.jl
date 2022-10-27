@@ -45,12 +45,12 @@ function shuffle!(
     ) where {A}
     #!NOTE: This contains only Particle Filter Particles, not full Model Parameter. Hence iterating over particle elements will not cause pointer issues (unlike ModelParameterBuffer)
     ## Shuffle Model parameter
-    @inbounds for idx in Base.OneTo(length(buffer.val))
+    @inbounds for idx in eachindex(buffer.val) #Base.OneTo(length(buffer.val))
         buffer.val[idx] = val[buffer.index[idx]]
     end
     ## Return back to appropriate place
     #!NOTE: Cannot be performed in same loop as before
-    @inbounds for idx in Base.OneTo(length(buffer.val))
+    @inbounds for idx in eachindex(buffer.val) #Base.OneTo(length(buffer.val))
         val[idx] = buffer.val[idx]
     end
     return nothing
@@ -129,7 +129,7 @@ function shuffle!(
     weights::AbstractVector{T}
     ) where {A<:AbstractAlgorithm, M<:AbstractModelWrapper, T<:Real}
     ## Shuffle Model parameter, log objective results and weights
-    @inbounds for idx in Base.OneTo(length(buffer.val))
+    @inbounds for idx in eachindex(buffer.val) #Base.OneTo(length(buffer.val))
         #!NOTE: This one has pointer issues:
         # buffer.val[idx] = model[buffer.index[idx]].val
         #!NOTE: copy does NOT work with NamedTuples of NamedTuples, but much faster than deepcopy
@@ -143,7 +143,7 @@ function shuffle!(
     end
     ## Return back to appropriate place
     #!NOTE: Cannot be performed in same loop as before
-    @inbounds for idx in Base.OneTo(length(buffer.val))
+    @inbounds for idx in eachindex(buffer.val) #Base.OneTo(length(buffer.val))
         model[idx].val = buffer.val[idx]
         weights[idx] = buffer.weight[idx]
         #!NOTE: There is not need to swap out results from algorithm vector, as UpdateTrue() will be used for first jitter step
